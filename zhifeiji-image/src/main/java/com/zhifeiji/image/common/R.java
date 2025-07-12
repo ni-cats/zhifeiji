@@ -1,18 +1,12 @@
 package com.zhifeiji.image.common;
 
 import lombok.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @Description TODO 通用返回结果类 服务端返回结果都会封装成此对象
- * @param <T>:
- * @return
- * @author Ni_cats
- * @email Ni_cats@163.com
- * @date 2023/4/14 15:15
- * @throws
+ * 通用返回结果类 服务端返回结果都会封装成此对象
  */
 
 @Data
