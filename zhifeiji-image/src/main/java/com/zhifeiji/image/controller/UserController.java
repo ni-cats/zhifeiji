@@ -2,6 +2,7 @@ package com.zhifeiji.image.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zhifeiji.image.common.R;
+import com.zhifeiji.image.dto.req.UserReq;
 import com.zhifeiji.image.entity.User;
 import com.zhifeiji.image.service.UserService;
 import com.zhifeiji.image.utils.ValidateCodeUtils;
@@ -20,10 +21,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/test")
-    public R<String> test() {
-        return R.success("zhifeiji-image");
+    @GetMapping("/get/{nickname}")
+    public R<User> getUser(@PathVariable("nickname") String nickname) {
+        if (StringUtils.isBlank(nickname)) {
+            return R.error("nickname is empty");
+        }
+        return R.success(userService.getUserByNickname(nickname));
     }
+
 
     @PostMapping("/sendMsg")
     public R<String> sendMsg(@RequestBody User user, HttpSession session) {
