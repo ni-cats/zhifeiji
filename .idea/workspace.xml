@@ -4,21 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f99452e1-a6e9-47ca-8ca7-209742c0f0a5" name="Changes" comment="feat:init">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/dto/req/UserReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/BaseEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/Image.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/image.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/user.sql" afterDir="false" />
+    <list default="true" id="f99452e1-a6e9-47ca-8ca7-209742c0f0a5" name="Changes" comment="feat: 初始化图片实体类">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/filter/LoginCheckFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/filter/LoginCheckFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +28,15 @@
     &quot;assignee&quot;: &quot;ni-cats&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ni-cats/zhifeiji.git&quot;,
-    &quot;accountId&quot;: &quot;e4f97532-45d5-41f9-9553-c70e59a17b25&quot;
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="c42fb42e-7cb9-47cb-b16a-8e3e161027cd" />
+  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ni-cats/zhifeiji.git",
+    "accountId": "a6c689ff-fdc8-40d4-ba58-1565bc141d1b"
   }
-}</component>
+}]]></component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -145,7 +135,7 @@
       <updated>1752331364570</updated>
       <workItem from="1752331365855" duration="2630000" />
       <workItem from="1752335021700" duration="4174000" />
-      <workItem from="1752339549025" duration="2852000" />
+      <workItem from="1752339549025" duration="4281000" />
     </task>
     <task id="LOCAL-00001" summary="feat:init">
       <option name="closed" value="true" />
@@ -187,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752334325744</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat: 初始化图片实体类">
+      <option name="closed" value="true" />
+      <created>1752342696873</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1752342696873</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +193,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat:init" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:init" />
+    <MESSAGE value="feat: 初始化图片实体类" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 初始化图片实体类" />
   </component>
 </project>
