@@ -1,4 +1,4 @@
-package com.zhifeiji.image.dto.req;
+package com.zhifeiji.image.dto.req.user;
 
 
 import lombok.AllArgsConstructor;

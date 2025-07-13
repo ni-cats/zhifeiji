@@ -1,20 +1,16 @@
-package com.zhifeiji.image.entity;
+package com.zhifeiji.image.dto.req.image;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image extends BaseEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Long id;
+public class UploadImageReq {
+
     // 图片名称
     private String name;
     // 分区id
@@ -23,7 +19,7 @@ public class Image extends BaseEntity implements Serializable {
     private String cosKey;
     // 用户昵称
     private String userNickName;
-    // 图片url地址
+    // 图片url
     private String url;
     // 经度
     private String Longitude;

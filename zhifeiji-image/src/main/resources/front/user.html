@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>用户信息</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>用户信息 - 纯Vue3实现</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://unpkg.com/element-plus"></script>
     <style>
         /* 页面重置与基础 */
         * {
@@ -18,7 +15,7 @@
         }
 
         body, html {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #f0f2f5;
             color: #333;
             height: 100%;
@@ -28,82 +25,7 @@
         #app {
             height: 100vh;
             display: flex;
-            flex-direction: row;
-            overflow: hidden;
-        }
-
-        /* 侧边栏 */
-        .sidebar {
-            width: 240px;
-            background: linear-gradient(135deg, #1877f2, #166fe5);
-            color: white;
-            display: flex;
             flex-direction: column;
-            padding: 25px 20px;
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .sidebar h2 {
-            margin: 0 0 30px 0;
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            text-align: center;
-            position: relative;
-        }
-
-        .sidebar h2:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-
-        .sidebar nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 12px 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar nav a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar nav a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
-        }
-
-        .sidebar nav a:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 5px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar nav a:hover:before {
-            transform: translateX(0);
         }
 
         /* 主内容区整体布局 */
@@ -112,85 +34,46 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
-        }
-
-        /* 顶部搜索栏 */
-        header {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-
-        header h1 {
-            margin: 0;
-            font-weight: 700;
-            color: #1877f2;
-            font-size: 1.6rem;
-            user-select: none;
-            display: flex;
-            align-items: center;
-        }
-
-        header h1 i {
-            margin-right: 8px;
-        }
-
-        header .search-wrapper {
-            flex: 1;
-            position: relative;
-        }
-
-        header .search-wrapper .el-input {
-            width: 100%;
-        }
-
-        header .search-wrapper .el-input__inner {
-            border-radius: 30px;
-            height: 40px;
-        }
-
-        header .search-wrapper .el-input-group__append {
-            border-radius: 0 30px 30px 0;
-            background: #1877f2;
-            border: none;
-        }
-
-        header .search-wrapper .el-input-group__append .el-button {
-            border-radius: 0 30px 30px 0;
-            background: #1877f2;
-            border: none;
-            color: white;
+            padding: 20px;
         }
 
         /* 内容滚动区 */
         .content-area {
-            padding: 30px;
+            flex: 1;
             overflow-y: auto;
             background: #f9fafc;
+        }
+
+        /* 用户列表容器 - 添加一个包裹容器以便定位搜索结果 */
+        .user-list-container {
+            position: relative;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             flex: 1;
-            scrollbar-width: thin;
-            scrollbar-color: #1877f2 #e0e6f8;
         }
 
-        .content-area::-webkit-scrollbar {
-            width: 6px;
+        .search-button {
+            padding: 8px 15px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
 
-        .content-area::-webkit-scrollbar-track {
-            background: #e0e6f8;
-            border-radius: 10px;
-        }
-
-        .content-area::-webkit-scrollbar-thumb {
-            background: #1877f2;
-            border-radius: 10px;
+        .search-button:hover {
+            background-color: #166fe5;
         }
 
         /* 用户列表 */
@@ -198,314 +81,383 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
-            margin-top: 20px;
         }
 
         .user-card {
-            background: linear-gradient(135deg, #ffffff, #f0f4ff);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(24, 119, 242, 0.15);
-            padding: 20px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(24, 119, 242, 0.1);
-            width: 100%;
-        }
-
-        .user-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #1877f2, #64b5f6);
-            border-radius: 4px 4px 0 0;
         }
 
         .user-card:hover {
-            box-shadow: 0 15px 35px rgba(24, 119, 242, 0.3);
-            transform: translateY(-8px);
-            border-color: rgba(24, 119, 242, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            border: 3px solid #e0e6f8;
-            margin-bottom: 12px;
             object-fit: cover;
-            transition: transform 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .user-card:hover .avatar {
-            transform: scale(1.05);
-            border-color: #1877f2;
+            margin-bottom: 10px;
+            border: 3px solid #e0e6f8;
         }
 
         .user-info h3 {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #1877f2;
-            margin-bottom: 6px;
-            font-weight: 600;
+            margin-bottom: 5px;
             text-align: center;
         }
 
         .user-info p {
+            font-size: 0.8rem;
+            color: #555;
+            margin: 3px 0;
+            text-align: center;
+        }
+
+        /* 删除按钮 */
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff4d4f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-card:hover .delete-button {
+            opacity: 1;
+        }
+
+        /* 用户详情扩展区域 - 默认隐藏 */
+        .user-details-expanded {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            width: 100%;
+        }
+
+        /* 用户详情扩展区域 - 展开状态 */
+        .user-card.active .user-details-expanded {
+            max-height: 200px; /* 足够显示详细信息的高度 */
+            margin-top: 10px;
+        }
+
+        .user-details-expanded p {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .user-details-expanded p i {
+            width: 15px;
+            color: #1877f2;
+            margin-right: 5px;
+        }
+
+        /* 查询结果展示区域 - 放置在用户列表上方 */
+        .search-result-container {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .search-result-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .search-result-card .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+            border: 3px solid #e0e6f8;
+        }
+
+        .search-result-card h3 {
+            font-size: 1.2rem;
+            color: #1877f2;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .search-result-card p {
             font-size: 0.9rem;
             color: #555;
             margin: 4px 0;
             text-align: center;
         }
 
-        .user-info p i {
-            margin-right: 4px;
-            color: #1877f2;
-        }
-
-        section.card {
+        /* 创建用户表单 */
+        .create-user-form {
             background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 35px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        section.card h2 {
-            font-size: 1.5rem;
-            color: #1877f2;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        section.card h2 i {
-            margin-right: 10px;
-        }
-
-        /* 表单样式 */
-        .el-form-item {
-            margin-bottom: 20px;
-        }
-
-        .el-button {
             border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
-        .el-button--primary {
-            background: linear-gradient(135deg, #1877f2, #166fe5);
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+
+        .form-button {
+            padding: 10px 15px;
+            background-color: #1877f2;
+            color: white;
             border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .el-button--success {
-            background: linear-gradient(135deg, #4caf50, #43a047);
-            border: none;
+        .form-button:hover {
+            background-color: #166fe5;
         }
 
-        .el-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        /* 提示信息 */
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
         }
 
-        /* 弹窗和提示 */
-        .el-alert {
-            border-radius: 10px;
-            margin-top: 20px;
+        .alert.info {
+            background-color: #e7f5ff;
+            border: 1px solid #bfdbfe;
+            color: #1877f2;
+        }
+
+        .alert.success {
+            background-color: #ebfbee;
+            border: 1px solid #b2f2bb;
+            color: #4caf50;
+        }
+
+        .alert.warning {
+            background-color: #fff9e6;
+            border: 1px solid #fff0c2;
+            color: #ffc107;
+        }
+
+        .alert.error {
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #ef4444;
         }
 
         /* 响应式调整 */
         @media (max-width: 768px) {
-            #app {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding: 15px;
-            }
-
-            .sidebar h2 {
-                font-size: 1.5rem;
-            }
-
             .user-list {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
 
-            .content-area {
-                padding: 20px;
+            .search-section {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
 <div id="app">
-    <!-- 侧边栏 -->
-    <aside class="sidebar">
-        <h2><i class="fas fa-users"></i> 用户管理</h2>
-        <nav>
-            <a href="#user-list" @click.prevent="scrollTo('user-list')">
-                <i class="fas fa-list-ul"></i> 用户列表
-            </a>
-            <a href="#search-user" @click.prevent="scrollTo('search-user')">
-                <i class="fas fa-search"></i> 查询用户
-            </a>
-            <a href="#create-user" @click.prevent="scrollTo('create-user')">
-                <i class="fas fa-user-plus"></i> 创建用户
-            </a>
-        </nav>
-    </aside>
-
     <!-- 主内容 -->
     <div class="main-content">
         <!-- 顶部搜索 -->
-        <header>
-            <h1><i class="fas fa-user"></i> 👤 用户信息管理</h1>
-            <div class="search-wrapper">
-                <el-input
-                        placeholder="搜索"
+        <header style="margin-bottom: 20px;">
+            <h2 style="margin-bottom: 15px; color: #1877f2;">👤 用户信息管理</h2>
+            <div class="search-section">
+                <input
                         v-model="nickname"
-                        clearable
-                        @clear="clearGetResult"
-                        @keyup.enter.native="getUser"
-                >
-                    <template #append>
-                        <el-button @click="getUser" icon="el-icon-search"></el-button>
-                    </template>
-                </el-input>
+                        placeholder="搜索昵称"
+                        class="search-input"
+                        @keyup.enter="getUser"
+                />
+                <button @click="getUser" class="search-button">查询</button>
             </div>
         </header>
 
         <!-- 内容滚动区域 -->
         <main class="content-area">
-            <!-- 用户列表 -->
-            <section id="user-list" class="card">
-                <h2><i class="fas fa-user-friends"></i> 📋 用户列表</h2>
-                <el-alert
-                        v-if="userList.length === 0 && !loading"
-                        title="暂无用户数据"
-                        type="info"
-                        show-icon
-                ></el-alert>
-                <el-spinner v-if="loading" style="margin: 20px auto; display: block;"></el-spinner>
-                <div class="user-list" v-if="userList.length > 0">
-                    <div
-                            class="user-card"
-                            v-for="user in userList"
-                            :key="user.id || user.nickname"
-                            @click="selectUser(user)"
-                            title="点击查看详情"
-                    >
+            <!-- 用户列表容器 -->
+            <div class="user-list-container">
+                <!-- 查询结果提示框 - 移到搜索结果上方 -->
+                <div v-if="searchAlertVisible" :class="['alert', searchAlertType]">
+                    {{ searchAlertMessage }}
+                </div>
+
+                <!-- 查询结果展示区域 - 放在用户列表上方 -->
+                <div class="search-result-container" v-if="searchResultUser">
+                    <div class="search-result-card">
                         <img
                                 class="avatar"
-                                :src="user.avatar || 'https://via.placeholder.com/80?text=头像'"
+                                :src="searchResultUser.avatar"
                                 alt="头像"
                         />
-                        <div class="user-info">
-                            <h3>{{ user.name }} ({{ user.nickname }})</h3>
-                            <p><i class="fas fa-birthday-cake"></i> 年龄: {{ user.age }} | <i class="fas fa-venus-mars"></i> 性别: {{ user.sex === 1 ? '男' : '女' }}</p>
-                            <p><i class="fas fa-phone"></i> 手机号: {{ user.phone }}</p>
-                            <p><i class="fas fa-id-card"></i> 身份证: {{ user.idNumber }}</p>
+                        <h3>{{ searchResultUser.name }} ({{ searchResultUser.nickname }})</h3>
+                        <div>
+                            <p><i class="fas fa-birthday-cake"></i> 年龄: {{ searchResultUser.age }} | <i
+                                    class="fas fa-venus-mars"></i> 性别: {{ searchResultUser.sex === 1 ? '男' : '女' }}
+                            </p>
+                            <p><i class="fas fa-phone"></i> 手机号: {{ searchResultUser.phone }}</p>
+                            <p><i class="fas fa-id-card"></i> 身份证: {{ searchResultUser.idNumber }}</p>
+                            <p v-if="searchResultUser.avatar"><i class="fas fa-image"></i> 头像已设置</p>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- 查询用户 -->
-            <section id="search-user" class="card">
-                <h2><i class="fas fa-search"></i> 🔍 查询用户</h2>
-                <el-form :inline="true" @submit.prevent="getUser">
-                    <el-form-item>
-                        <el-input v-model="nickname" placeholder="请输入昵称"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="getUser">查询</el-button>
-                    </el-form-item>
-                </el-form>
+                <!-- 用户列表 -->
+                <section>
+                    <h3><i class="fas fa-user-friends"></i> 📋 用户列表</h3>
+                    <div v-if="userList.length === 0 && !loading" class="alert info">
+                        暂无用户数据
+                    </div>
+                    <div v-if="loading" style="text-align: center; padding: 20px;">
+                        加载中...
+                    </div>
+                    <div class="user-list" v-if="userList.length > 0">
+                        <div
+                                class="user-card"
+                                v-for="user in userList"
+                                :key="user.id || user.nickname"
+                                @click="selectUser(user)"
+                                :class="{active: expandedUser && expandedUser.id === user.id}"
+                                title="点击查看详情"
+                        >
+                            <img
+                                    class="avatar"
+                                    :src="user.avatar || 'https://via.placeholder.com/80?text=头像'"
+                                    alt="头像"
+                            />
+                            <div class="user-info">
+                                <h3>{{ user.name }} ({{ user.nickname }})</h3>
+                                <p>年龄: {{ user.age }} | 性别: {{ user.sex === 1 ? '男' : '女' }}</p>
+                                <p>手机号: {{ user.phone }}</p>
+                            </div>
 
-                <el-alert
-                        v-if="getResult"
-                        :title="getResultTitle"
-                        :type="getResultType"
-                        show-icon
-                        style="margin-top: 20px;"
-                ></el-alert>
-                <el-card v-if="getResultData" style="margin-top: 10px;">
-                    <pre>{{ getResultData }}</pre>
-                </el-card>
-            </section>
+                            <!-- 删除按钮 -->
+                            <button @click.stop="deleteUser(user.id)" class="delete-button">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                            <!-- 用户详情扩展区域 -->
+                            <div class="user-details-expanded" v-if="expandedUser && expandedUser.id === user.id">
+                                <p><i class="fas fa-id-card"></i> 身份证: {{ user.idNumber }}</p>
+                                <!-- 如果有头像URL也可以在这里显示 -->
+                                <p v-if="user.avatar"><i class="fas fa-image"></i> 头像已设置</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
             <!-- 创建用户 -->
-            <section id="create-user" class="card">
-                <h2><i class="fas fa-user-plus"></i> 📝 创建新用户</h2>
-                <el-form :model="userForm" label-width="100px" @submit.prevent="createUser">
-                    <el-form-item label="姓名">
-                        <el-input v-model="userForm.name" required></el-input>
-                    </el-form-item>
-                    <el-form-item label="昵称">
-                        <el-input v-model="userForm.nickname" required></el-input>
-                    </el-form-item>
-                    <el-form-item label="年龄">
-                        <el-input-number v-model="userForm.age" :min="1" :max="120" required></el-input-number>
-                    </el-form-item>
-                    <el-form-item label="手机号">
-                        <el-input v-model="userForm.phone" required></el-input>
-                    </el-form-item>
-                    <el-form-item label="性别">
-                        <el-select v-model="userForm.sex" placeholder="请选择" required>
-                            <el-option label="女" value="0"></el-option>
-                            <el-option label="男" value="1"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="身份证号">
-                        <el-input v-model="userForm.idNumber" required></el-input>
-                    </el-form-item>
-                    <el-form-item label="头像URL">
-                        <el-input v-model="userForm.avatar"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="success" native-type="submit">创建用户</el-button>
-                    </el-form-item>
-                </el-form>
+            <section class="card" style="margin-top: 30px;">
+                <h3><i class="fas fa-user-plus"></i> 📝 创建新用户</h3>
+                <div class="create-user-form">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input id="name" v-model="userForm.name" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">昵称</label>
+                        <input id="nickname" v-model="userForm.nickname" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">年龄</label>
+                        <input id="age" type="number" v-model="userForm.age" min="1" max="120" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">手机号</label>
+                        <input id="phone" v-model="userForm.phone" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">性别</label>
+                        <select id="sex" v-model="userForm.sex" required>
+                            <option value="">请选择</option>
+                            <option value="0">女</option>
+                            <option value="1">男</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idNumber">身份证号</label>
+                        <input id="idNumber" v-model="userForm.idNumber" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">头像URL</label>
+                        <input id="avatar" v-model="userForm.avatar"/>
+                    </div>
+                    <button @click="createUser" class="form-button">创建用户</button>
+                </div>
 
-                <el-alert
-                        v-if="postResult"
-                        :title="postResultTitle"
-                        :type="postResultType"
-                        show-icon
-                        style="margin-top: 20px;"
-                ></el-alert>
-                <el-card v-if="postResultData" style="margin-top: 10px;">
-                    <pre>{{ postResultData }}</pre>
-                </el-card>
+                <div v-if="postResult" :class="['alert', postResultType]">
+                    {{ postResultTitle }}
+                </div>
             </section>
         </main>
     </div>
 </div>
 
 <script>
-    const { createApp, ref, onMounted } = Vue;
+    const {createApp, ref, onMounted} = Vue;
     createApp({
         setup() {
             const userList = ref([]);
             const loading = ref(false);
 
+            // 当前展开的用户详情
+            const expandedUser = ref(null);
+
+            // 搜索结果用户
+            const searchResultUser = ref(null);
+
+            // 搜索相关的提示信息（独立于表单提交的提示）
+            const searchAlertVisible = ref(false);
+            const searchAlertMessage = ref("");
+            const searchAlertType = ref("success");
+
             const nickname = ref("");
-            const getResult = ref(false);
-            const getResultTitle = ref("");
-            const getResultType = ref("success");
-            const getResultData = ref("");
 
             const userForm = ref({
                 name: "",
@@ -516,6 +468,8 @@
                 idNumber: "",
                 avatar: ""
             });
+
+            // 表单提交相关的提示信息
             const postResult = ref(false);
             const postResultTitle = ref("");
             const postResultType = ref("success");
@@ -543,33 +497,36 @@
             };
 
             const getUser = () => {
+                // 重置之前的搜索状态
+                searchResultUser.value = null;
+                searchAlertVisible.value = false;
+
                 if (!nickname.value.trim()) {
-                    getResultTitle.value = "请输入昵称";
-                    getResultType.value = "warning";
-                    getResultData.value = "";
-                    getResult.value = true;
+                    searchAlertMessage.value = "请输入昵称";
+                    searchAlertType.value = "warning";
+                    searchAlertVisible.value = true;
                     return;
                 }
+
                 fetch(`http://localhost:8080/user/get?nickname=${encodeURIComponent(nickname.value)}`, {
                     method: "GET"
                 })
                     .then((res) => res.json())
                     .then((data) => {
                         if (data.code === 0) {
-                            getResultTitle.value = "查询成功";
-                            getResultType.value = "success";
-                            getResultData.value = JSON.stringify(data.data, null, 2);
+                            searchAlertMessage.value = "查询成功";
+                            searchAlertType.value = "success";
+                            searchResultUser.value = data.data;
                         } else {
-                            getResultTitle.value = `错误: ${data.message}`;
-                            getResultType.value = "error";
-                            getResultData.value = "";
+                            searchAlertMessage.value = `错误: ${data.message}`;
+                            searchAlertType.value = "error";
                         }
-                        getResult.value = true;
+                        searchAlertVisible.value = true;
                     })
                     .catch((err) => {
-                        getResultTitle.value = "请求出错: " + err;
-                        getResultType.value = "error";
-                        getResult.value = true;
+                        searchAlertMessage.value = "请求出错: " + err;
+                        searchAlertType.value = "error";
+                        searchAlertVisible.value = true;
                     });
             };
 
@@ -577,13 +534,13 @@
                 if (!userForm.value.name || !userForm.value.nickname || !userForm.value.age || !userForm.value.phone || userForm.value.sex === "") {
                     postResultTitle.value = "请填写必填项";
                     postResultType.value = "warning";
-                    postResultData.value = "";
                     postResult.value = true;
                     return;
                 }
+
                 fetch("http://localhost:8080/user/create", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(userForm.value)
                 })
                     .then((res) => res.json())
@@ -591,8 +548,8 @@
                         if (data.code === 0) {
                             postResultTitle.value = "用户创建成功";
                             postResultType.value = "success";
-                            postResultData.value = JSON.stringify(data, null, 2);
-                            fetchUserList();
+
+                            // 重置表单
                             userForm.value = {
                                 name: "",
                                 nickname: "",
@@ -602,12 +559,19 @@
                                 idNumber: "",
                                 avatar: ""
                             };
+
+                            // 重新获取用户列表
+                            fetchUserList();
                         } else {
                             postResultTitle.value = `错误: ${data.message}`;
                             postResultType.value = "error";
-                            postResultData.value = "";
                         }
                         postResult.value = true;
+
+                        // 3秒后自动隐藏提示
+                        setTimeout(() => {
+                            postResult.value = false;
+                        }, 3000);
                     })
                     .catch((err) => {
                         postResultTitle.value = "请求出错: " + err;
@@ -616,20 +580,50 @@
                     });
             };
 
-            const clearGetResult = () => {
-                getResult.value = false;
-                getResultData.value = "";
+            const deleteUser = (id) => {
+                if (confirm('确定要删除这个用户吗？')) {
+                    fetch(`http://localhost:8080/user/delete?id=${id}`, {
+                        method: "GET"
+                    })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            if (data.code === 0) {
+                                postResultTitle.value = "用户删除成功";
+                                postResultType.value = "success";
+
+                                // 重新获取用户列表以更新UI
+                                fetchUserList();
+                            } else {
+                                postResultTitle.value = `错误: ${data.message}`;
+                                postResultType.value = "error";
+                            }
+                            postResult.value = true;
+
+                            // 3秒后自动隐藏提示
+                            setTimeout(() => {
+                                postResult.value = false;
+                            }, 3000);
+                        })
+                        .catch((err) => {
+                            postResultTitle.value = "请求出错: " + err;
+                            postResultType.value = "error";
+                            postResult.value = true;
+                        });
+                }
             };
 
             const selectUser = (user) => {
-                alert(`用户信息：\n姓名：${user.name}\n昵称：${user.nickname}\n年龄：${user.age}\n手机号：${user.phone}\n性别：${user.sex === 1 ? '男' : '女'}\n身份证：${user.idNumber}`);
-            };
-
-            const scrollTo = (id) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.scrollIntoView({ behavior: "smooth" });
+                // 如果当前已经有展开的用户，并且点击的是同一个用户，则收起详情
+                if (expandedUser.value && expandedUser.value.id === user.id) {
+                    expandedUser.value = null;
+                } else {
+                    // 否则展开点击的用户详情
+                    expandedUser.value = user;
                 }
+
+                // 清除搜索结果
+                searchResultUser.value = null;
+                searchAlertVisible.value = false;
             };
 
             onMounted(() => {
@@ -641,22 +635,22 @@
                 loading,
                 nickname,
                 getUser,
-                getResult,
-                getResultTitle,
-                getResultType,
-                getResultData,
                 userForm,
                 createUser,
                 postResult,
                 postResultTitle,
                 postResultType,
                 postResultData,
-                clearGetResult,
                 selectUser,
-                scrollTo
+                expandedUser,
+                searchResultUser,
+                deleteUser,
+                searchAlertVisible,
+                searchAlertMessage,
+                searchAlertType
             };
         }
-    }).use(ElementPlus).mount("#app");
+    }).mount("#app");
 </script>
 </body>
 </html>

@@ -31,4 +31,6 @@ public class User extends BaseEntity implements Serializable {
     private String idNumber;
     // 头像URL
     private String avatar;
+    // 状态
+    private Integer status;
 }

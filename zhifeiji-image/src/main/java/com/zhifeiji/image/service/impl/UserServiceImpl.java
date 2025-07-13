@@ -1,15 +1,14 @@
 package com.zhifeiji.image.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zhifeiji.image.dto.req.CreateUserReq;
+import com.zhifeiji.image.common.enums.Magic;
+import com.zhifeiji.image.dto.req.user.CreateUserReq;
 import com.zhifeiji.image.entity.User;
 import com.zhifeiji.image.mapper.UserMapper;
 import com.zhifeiji.image.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -36,6 +35,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .idNumber(req.getIdNumber())
                 .avatar(req.getAvatar())
                 .build();
-        return userMapper.insert(user) == 1;
+        return Magic.ONE.getCode() == userMapper.insert(user);
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        return Magic.ONE.getCode() == userMapper.deleteById(id);
     }
 }

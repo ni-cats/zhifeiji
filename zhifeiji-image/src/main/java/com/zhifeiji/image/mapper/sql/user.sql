@@ -1,3 +1,7 @@
+use zhifeiji_image;
+
+drop table `user`;
+
 CREATE TABLE `user`
 (
     `id`          bigint NOT NULL AUTO_INCREMENT COMMENT '用户ID',
@@ -7,33 +11,18 @@ CREATE TABLE `user`
     `phone`       varchar(20)  DEFAULT NULL COMMENT '手机号',
     `sex`         tinyint      DEFAULT NULL COMMENT '性别 0:女 1:男',
     `id_number`   varchar(18)  DEFAULT NULL COMMENT '身份证号',
-    `avatar`      varchar(100) DEFAULT NULL COMMENT '头像URL',
+    `avatar`      varchar(100) DEFAULT NULL COMMENT '头像',
     `status`      int          DEFAULT NULL COMMENT '状态 0:禁用 1:正常',
-    `create_time` int          DEFAULT NULL COMMENT '创建时间(时间戳)',
-    `modify_time` int          DEFAULT NULL COMMENT '修改时间(时间戳)',
+    `create_time`    DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted`     TINYINT(1)   DEFAULT 0 COMMENT '逻辑删除 0-未删 1-已删',
     PRIMARY KEY (`id`),
     KEY `idx_phone` (`phone`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT ='用户表';
+  AUTO_INCREMENT = 1944387486074376195
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='用户表';
+
+select * from user;
 
 
-INSERT INTO `user` (`name`,
-                    `nickname`,
-                    `age`,
-                    `phone`,
-                    `sex`,
-                    `id_number`,
-                    `avatar`,
-                    `status`,
-                    `create_time`,
-                    `modify_time`)
-VALUES ('郑海清',
-        '夺命喵九',
-        25,
-        '***********',
-        1,
-        '*****************',
-        'https://example.com/avatar/zhangsan.jpg',
-        1,
-        UNIX_TIMESTAMP(),
-        UNIX_TIMESTAMP());
