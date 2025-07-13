@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="com.zhifeiji.image")
 @ServletComponentScan
 @EnableTransactionManagement
 public class ZhifeijiImageApplication {
