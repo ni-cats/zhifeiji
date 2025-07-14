@@ -20,10 +20,6 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    public UserController() {
-        System.out.println(">>> UserController 被加载");
-    }
-
     @Autowired
     private UserService userService;
 

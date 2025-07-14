@@ -4,44 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f99452e1-a6e9-47ca-8ca7-209742c0f0a5" name="Changes" comment="feat: 用户信息前端页面开发">
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/common/enums/Magic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/dto/req/image/UploadImageReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/ImageMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/ImageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/impl/ImageServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/front/image-new.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/front/image.html" afterDir="false" />
+    <list default="true" id="b1b635e2-aeab-4575-bb9d-d0477dd4b709" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/ImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/ImageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/dto/req/CreateUserReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/dto/req/user/CreateUserReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/BaseEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/Image.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/image.sql" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/image.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/user.sql" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/mapper/sql/user.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/java/com/zhifeiji/image/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/front/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/zhifeiji-image/src/main/resources/front/user.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-        <option value="Enum" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -50,79 +30,65 @@
     &quot;assignee&quot;: &quot;ni-cats&quot;
   }
 }</component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="c42fb42e-7cb9-47cb-b16a-8e3e161027cd" />
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ni-cats/zhifeiji.git&quot;,
-    &quot;accountId&quot;: &quot;a6c689ff-fdc8-40d4-ba58-1565bc141d1b&quot;
+    &quot;accountId&quot;: &quot;c867d901-bd47-4ec6-b958-9558cef0f2a5&quot;
   }
 }</component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2zmLaB4HYg2q3lDy12GBRlAVDtG" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2zqVayrOe9632ztwGQfz1Urd0MH" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ZhifeijiImageApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ZhifeijiImageApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/miaojiu/IdeaProjects/zhifeiji/zhifeiji-image/src/main/resources&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ]
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.ZhifeijiImageApplication.executor": "Run",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/zhifeiji-image/src/main/resources" />
-      <recent name="$PROJECT_DIR$/zhifeiji-image" />
-    </key>
-  </component>
+}]]></component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
-        <option value="KtorApplicationConfigurationType" />
-        <option value="MicronautRunConfigurationType" />
-        <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="zhifeiji" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="zhifeiji" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <configuration name="ZhifeijiImageApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="zhifeiji-image" />
+      <module name="sjiang_take_out" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.zhifeiji.image.ZhifeijiImageApplication" />
       <extension name="coverage">
         <pattern>
@@ -143,106 +109,28 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f99452e1-a6e9-47ca-8ca7-209742c0f0a5" name="Changes" comment="" />
-      <created>1752331364570</created>
+      <changelist id="b1b635e2-aeab-4575-bb9d-d0477dd4b709" name="Changes" comment="" />
+      <created>1752458658299</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1752331364570</updated>
-      <workItem from="1752331365855" duration="2630000" />
-      <workItem from="1752335021700" duration="4174000" />
-      <workItem from="1752339549025" duration="23358000" />
-      <workItem from="1752421031694" duration="648000" />
+      <updated>1752458658299</updated>
+      <workItem from="1752458659582" duration="38000" />
+      <workItem from="1752458726843" duration="282000" />
+      <workItem from="1752459015350" duration="649000" />
+      <workItem from="1752459910289" duration="30000" />
+      <workItem from="1752459951047" duration="83000" />
+      <workItem from="1752460041495" duration="709000" />
     </task>
-    <task id="LOCAL-00001" summary="feat:init">
-      <option name="closed" value="true" />
-      <created>1752333156846</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1752333156846</updated>
-    </task>
-    <task id="LOCAL-00002" summary="feat:init">
-      <option name="closed" value="true" />
-      <created>1752333161685</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1752333161685</updated>
-    </task>
-    <task id="LOCAL-00003" summary="feat:init">
-      <option name="closed" value="true" />
-      <created>1752333229361</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1752333229361</updated>
-    </task>
-    <task id="LOCAL-00004" summary="feat:init">
-      <option name="closed" value="true" />
-      <created>1752334254198</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1752334254198</updated>
-    </task>
-    <task id="LOCAL-00005" summary="feat:init">
-      <option name="closed" value="true" />
-      <created>1752334325744</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1752334325744</updated>
-    </task>
-    <task id="LOCAL-00006" summary="feat: 初始化图片实体类">
-      <option name="closed" value="true" />
-      <created>1752342696873</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1752342696873</updated>
-    </task>
-    <task id="LOCAL-00007" summary="feat: 初始化图片实体类">
-      <option name="closed" value="true" />
-      <created>1752373860142</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1752373860142</updated>
-    </task>
-    <task id="LOCAL-00008" summary="feat: 初始化图片实体类">
-      <option name="closed" value="true" />
-      <created>1752375464593</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1752375464593</updated>
-    </task>
-    <task id="LOCAL-00009" summary="feat: 用户信息前端页面开发">
-      <option name="closed" value="true" />
-      <created>1752385048280</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1752385048280</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat:init" />
-    <MESSAGE value="feat: 初始化图片实体类" />
-    <MESSAGE value="feat: 用户信息前端页面开发" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 用户信息前端页面开发" />
   </component>
 </project>
