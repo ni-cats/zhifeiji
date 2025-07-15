@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        accent: '#722ED1',
+                        success: '#00B42A',
+                        warning: '#FF7D00',
+                        danger: '#F53F3F',
+                        dark: '#1D2129',
+                        'dark-2': '#4E5969',
+                        'light-1': '#F2F3F5',
+                        'light-2': '#E5E6EB',
+                        'light-3': '#C9CDD4',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }
+                },
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .transition-all-300 {
+                transition: all 0.3s ease;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #165DFF 0%, #722ED1 100%);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light-1 min-h-screen flex flex-col">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <i class="fa fa-picture-o text-primary text-2xl"></i>
+            <h1 class="text-xl font-semibold text-dark">图片管理系统</h1>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#" class="text-dark-2 hover:text-primary transition-all-300 flex items-center">
+                <i class="fa fa-home mr-1"></i> 首页
+            </a>
+            <a href="#" class="text-dark-2 hover:text-primary transition-all-300 flex items-center">
+                <i class="fa fa-folder mr-1"></i> 图库
+            </a>
+            <a href="#" class="text-dark-2 hover:text-primary transition-all-300 flex items-center">
+                <i class="fa fa-bar-chart mr-1"></i> 统计
+            </a>
+            <a href="#" class="text-dark-2 hover:text-primary transition-all-300 flex items-center">
+                <i class="fa fa-cog mr-1"></i> 设置
+            </a>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <div class="relative">
+                <input type="text" placeholder="搜索图片..." class="py-1.5 pl-9 pr-3 rounded-full border border-light-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-sm w-40 md:w-60">
+                <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-light-3"></i>
+            </div>
+
+            <div class="relative">
+                <button class="bg-light-1 hover:bg-light-2 rounded-full p-2 transition-all-300">
+                    <i class="fa fa-bell-o text-dark-2"></i>
+                    <span class="absolute top-0 right-0 h-2 w-2 bg-danger rounded-full"></span>
+                </button>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-2">
+                <img src="https://picsum.photos/id/1005/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover border-2 border-white shadow-sm">
+                <span class="text-sm font-medium text-dark">管理员</span>
+            </div>
+
+            <button class="md:hidden text-dark-2">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- 主要内容区 -->
+<main class="flex-grow container mx-auto px-4 py-6">
+    <!-- 页面标题和操作区 -->
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-1">图片管理</h2>
+                <p class="text-dark-2">管理所有上传的图片资源，包括查看、编辑和删除操作</p>
+            </div>
+
+            <div class="mt-4 md:mt-0 flex flex-wrap gap-3">
+                <div class="relative">
+                    <select class="appearance-none bg-white border border-light-2 rounded-lg py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                        <option>所有分区</option>
+                        <option>风景</option>
+                        <option>人物</option>
+                        <option>动物</option>
+                        <option>建筑</option>
+                    </select>
+                    <i class="fa fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-light-3 pointer-events-none"></i>
+                </div>
+
+                <div class="relative">
+                    <select class="appearance-none bg-white border border-light-2 rounded-lg py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                        <option>最近上传</option>
+                        <option>最早上传</option>
+                        <option>名称升序</option>
+                        <option>名称降序</option>
+                    </select>
+                    <i class="fa fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-light-3 pointer-events-none"></i>
+                </div>
+
+                <button id="upload-btn" class="bg-primary hover:bg-primary/90 text-white rounded-lg py-2 px-4 flex items-center transition-all-300 shadow-md hover:shadow-lg">
+                    <i class="fa fa-upload mr-2"></i> 上传图片
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据概览卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all-300 p-5 border-l-4 border-primary">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-dark-2 text-sm font-medium">总图片数</p>
+                    <h3 class="text-2xl font-bold text-dark mt-1">2,451</h3>
+                    <p class="text-success text-xs flex items-center mt-2">
+                        <i class="fa fa-arrow-up mr-1"></i> 12% 较上月
+                    </p>
+                </div>
+                <div class="bg-primary/10 p-3 rounded-lg">
+                    <i class="fa fa-image text-primary text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all-300 p-5 border-l-4 border-secondary">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-dark-2 text-sm font-medium">本月上传</p>
+                    <h3 class="text-2xl font-bold text-dark mt-1">342</h3>
+                    <p class="text-success text-xs flex items-center mt-2">
+                        <i class="fa fa-arrow-up mr-1"></i> 8% 较上月
+                    </p>
+                </div>
+                <div class="bg-secondary/10 p-3 rounded-lg">
+                    <i class="fa fa-cloud-upload text-secondary text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all-300 p-5 border-l-4 border-accent">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-dark-2 text-sm font-medium">存储空间</p>
+                    <h3 class="text-2xl font-bold text-dark mt-1">12.5 GB</h3>
+                    <p class="text-danger text-xs flex items-center mt-2">
+                        <i class="fa fa-arrow-up mr-1"></i> 25% 已使用
+                    </p>
+                </div>
+                <div class="bg-accent/10 p-3 rounded-lg">
+                    <i class="fa fa-hdd-o text-accent text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all-300 p-5 border-l-4 border-warning">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-dark-2 text-sm font-medium">热门上传者</p>
+                    <h3 class="text-lg font-bold text-dark mt-1">张小明</h3>
+                    <p class="text-dark-2 text-xs mt-2">上传了 187 张图片</p>
+                </div>
+                <div class="bg-warning/10 p-3 rounded-lg">
+                    <i class="fa fa-user text-warning text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片展示区 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- 图片卡片 1 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all-300 group">
+            <div class="relative h-60 overflow-hidden">
+                <img src="https://picsum.photos/id/10/800/600" alt="风景图片" class="w-full h-full object-cover transition-all-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex space-x-2">
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-white font-medium text-shadow">山间湖泊</h3>
+                    <p class="text-white/80 text-sm">风景</p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1005/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                        <span class="ml-2 text-sm text-dark-2">张小明</span>
+                    </div>
+                    <span class="text-xs text-dark-2">2023-05-12</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-dark-2">
+                    <div class="flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>
+                        <span>黄山风景区</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center"><i class="fa fa-eye mr-1"></i> 1.2k</span>
+                        <span class="flex items-center"><i class="fa fa-heart mr-1"></i> 245</span>
+                        <span class="flex items-center"><i class="fa fa-comment mr-1"></i> 32</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片卡片 2 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all-300 group">
+            <div class="relative h-60 overflow-hidden">
+                <img src="https://picsum.photos/id/26/800/600" alt="自然风景" class="w-full h-full object-cover transition-all-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex space-x-2">
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-white font-medium text-shadow">森林小径</h3>
+                    <p class="text-white/80 text-sm">自然</p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1012/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                        <span class="ml-2 text-sm text-dark-2">李华</span>
+                    </div>
+                    <span class="text-xs text-dark-2">2023-06-18</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-dark-2">
+                    <div class="flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>
+                        <span>张家界森林公园</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center"><i class="fa fa-eye mr-1"></i> 987</span>
+                        <span class="flex items-center"><i class="fa fa-heart mr-1"></i> 189</span>
+                        <span class="flex items-center"><i class="fa fa-comment mr-1"></i> 24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片卡片 3 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all-300 group">
+            <div class="relative h-60 overflow-hidden">
+                <img src="https://picsum.photos/id/65/800/600" alt="城市建筑" class="w-full h-full object-cover transition-all-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex space-x-2">
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-white font-medium text-shadow">城市天际线</h3>
+                    <p class="text-white/80 text-sm">建筑</p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1027/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                        <span class="ml-2 text-sm text-dark-2">王芳</span>
+                    </div>
+                    <span class="text-xs text-dark-2">2023-07-05</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-dark-2">
+                    <div class="flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>
+                        <span>上海浦东新区</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center"><i class="fa fa-eye mr-1"></i> 2.3k</span>
+                        <span class="flex items-center"><i class="fa fa-heart mr-1"></i> 356</span>
+                        <span class="flex items-center"><i class="fa fa-comment mr-1"></i> 47</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片卡片 4 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all-300 group">
+            <div class="relative h-60 overflow-hidden">
+                <img src="https://picsum.photos/id/96/800/600" alt="动物照片" class="w-full h-full object-cover transition-all-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex space-x-2">
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-white font-medium text-shadow">可爱猫咪</h3>
+                    <p class="text-white/80 text-sm">动物</p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1025/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                        <span class="ml-2 text-sm text-dark-2">赵伟</span>
+                    </div>
+                    <span class="text-xs text-dark-2">2023-08-22</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-dark-2">
+                    <div class="flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>
+                        <span>北京市朝阳区</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center"><i class="fa fa-eye mr-1"></i> 3.1k</span>
+                        <span class="flex items-center"><i class="fa fa-heart mr-1"></i> 587</span>
+                        <span class="flex items-center"><i class="fa fa-comment mr-1"></i> 63</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片卡片 5 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all-300 group">
+            <div class="relative h-60 overflow-hidden">
+                <img src="https://picsum.photos/id/103/800/600" alt="海滩风景" class="w-full h-full object-cover transition-all-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex space-x-2">
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-white/80 hover:bg-white text-dark p-2 rounded-full transition-all-300 backdrop-blur-sm">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <h3 class="text-white font-medium text-shadow">美丽海滩</h3>
+                    <p class="text-white/80 text-sm">风景</p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <img src="https://picsum.photos/id/1074/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover">
+                        <span class="ml-2 text-sm text-dark-2">陈明</span>
+                    </div>
+                    <span class="text-xs text-dark-2">2023-09-14</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-dark-2">
+                    <div class="flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>
+                        <span>三亚亚龙湾</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center"><i class="fa fa-eye mr-1"></i> 1.8k</span>
+                        <span class="flex items-center"><i class="fa fa-heart mr-1"></i> 321</span>
+                        <span class="flex items-center"><i class="fa fa-comment mr-1"></i> 42</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 上传新图片卡片 -->
+        <div class="border-2 border-dashed border-light-3 rounded-xl p-8 flex flex-col items-center justify-center hover:border-primary transition-all-300 cursor-pointer bg-white/50">
+            <div class="bg-primary/10 p-5 rounded-full mb-4">
+                <i class="fa fa-cloud-upload text-primary text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-dark mb-2">上传新图片</h3>
+            <p class="text-center text-dark-2 text-sm mb-6">点击或拖拽文件到此处上传</p>
+            <button class="bg-primary hover:bg-primary/90 text-white rounded-lg py-2 px-6 transition-all-300">
+                选择文件
+            </button>
+        </div>
+    </div>
+
+    <!-- 图片统计和地图 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-card p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-dark">图片分类统计</h3>
+                <div class="flex space-x-2">
+                    <button class="text-sm bg-light-1 hover:bg-light-2 text-dark-2 rounded-lg py-1 px-3 transition-all-300">周</button>
+                    <button class="text-sm bg-primary text-white rounded-lg py-1 px-3 transition-all-300">月</button>
+                    <button class="text-sm bg-light-1 hover:bg-light-2 text-dark-2 rounded-lg py-1 px-3 transition-all-300">年</button>
+                </div>
+            </div>
+            <div class="h-80">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-card p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-dark">图片地理位置</h3>
+                <button class="text-primary text-sm hover:underline">查看全部</button>
+            </div>
+            <div class="h-80 relative rounded-lg overflow-hidden bg-light-1 flex items-center justify-center">
+                <!-- 地图占位 -->
+                <img src="https://picsum.photos/id/101/800/600" alt="地图展示" class="w-full h-full object-cover">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-primary text-white rounded-full p-3 shadow-lg animate-ping opacity-75"></div>
+                    <div class="bg-primary text-white rounded-full p-3 shadow-lg z-10">
+                        <i class="fa fa-map-marker"></i>
+                    </div>
+                </div>
+                <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
+                    <h4 class="font-medium text-dark">黄山风景区</h4>
+                    <p class="text-sm text-dark-2">共有 128 张图片</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近上传图片 -->
+    <div class="bg-white rounded-xl shadow-card p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-dark">最近上传</h3>
+            <button class="text-primary text-sm hover:underline">查看全部</button>
+        </div>
+
+        <div class="overflow-x-auto scrollbar-hide">
+            <table class="w-full">
+                <thead>
+                <tr class="border-b border-light-2">
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">图片</th>
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">名称</th>
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">分区</th>
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">上传者</th>
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">上传时间</th>
+                    <th class="text-left py-3 px-4 text-dark-2 font-medium text-sm">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-b border-light-2 hover:bg-light-1/50 transition-all-300">
+                    <td class="py-3 px-4">
+                        <img src="https://picsum.photos/id/110/100/100" alt="风景照片" class="h-12 w-12 rounded object-cover">
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-medium text-dark">高山湖泊</div>
+                        <div class="text-xs text-dark-2">JPG · 2.4MB</div>
+                    </td>
+                    <td class="py-3 px-4 text-dark-2">风景</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <img src="https://picsum.photos/id/1005/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover mr-2">
+                            <span class="text-sm text-dark">张小明</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-dark-2 text-sm">2023-10-15 14:32</td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="text-primary hover:text-primary/80 transition-all-300">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="text-dark-2 hover:text-dark transition-all-300">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="text-danger hover:text-danger/80 transition-all-300">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="border-b border-light-2 hover:bg-light-1/50 transition-all-300">
+                    <td class="py-3 px-4">
+                        <img src="https://picsum.photos/id/122/100/100" alt="城市照片" class="h-12 w-12 rounded object-cover">
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-medium text-dark">城市夜景</div>
+                        <div class="text-xs text-dark-2">PNG · 3.8MB</div>
+                    </td>
+                    <td class="py-3 px-4 text-dark-2">建筑</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <img src="https://picsum.photos/id/1027/200/200" alt="用户头像" class="h-8 w-8 rounded-full object-cover mr-2">
+                            <span class="text-sm text-dark">王芳</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-dark-2 text-sm">2023-10-14 09:15</td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="text-primary hover:text-primary/80 transition-all-300">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="text-dark-2 hover:text-dark transition-all-300">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="text-danger hover:text-danger/80 transition-all-300">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="border-b border-light-2 hover:bg-light-1/50 transition-all-300">

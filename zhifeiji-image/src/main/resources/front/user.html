@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>用户信息 - 纯Vue3实现</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        /* 页面重置与基础 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            height: 100%;
+            line-height: 1.6;
+        }
+
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 主内容区整体布局 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* 内容滚动区 */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            background: #f9fafc;
+        }
+
+        /* 用户列表容器 - 添加一个包裹容器以便定位搜索结果 */
+        .user-list-container {
+            position: relative;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex: 1;
+        }
+
+        .search-button {
+            padding: 8px 15px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #166fe5;
+        }
+
+        /* 用户列表 */
+        .user-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .user-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #e0e6f8;
+        }
+
+        .user-info h3 {
+            font-size: 1rem;
+            color: #1877f2;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: #555;
+            margin: 3px 0;
+            text-align: center;
+        }
+
+        /* 删除按钮 */
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff4d4f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-card:hover .delete-button {
+            opacity: 1;
+        }
+
+        /* 用户详情扩展区域 - 默认隐藏 */
+        .user-details-expanded {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            width: 100%;
+        }
+
+        /* 用户详情扩展区域 - 展开状态 */
+        .user-card.active .user-details-expanded {
+            max-height: 200px; /* 足够显示详细信息的高度 */
+            margin-top: 10px;
+        }
+
+        .user-details-expanded p {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .user-details-expanded p i {
+            width: 15px;
+            color: #1877f2;
+            margin-right: 5px;
+        }
+
+        /* 查询结果展示区域 - 放置在用户列表上方 */
+        .search-result-container {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .search-result-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .search-result-card .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+            border: 3px solid #e0e6f8;
+        }
+
+        .search-result-card h3 {
+            font-size: 1.2rem;
+            color: #1877f2;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .search-result-card p {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 4px 0;
+            text-align: center;
+        }
+
+        /* 创建用户表单 */
+        .create-user-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+
+        .form-button {
+            padding: 10px 15px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .form-button:hover {
+            background-color: #166fe5;
+        }
+
+        /* 提示信息 */
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .alert.info {
+            background-color: #e7f5ff;
+            border: 1px solid #bfdbfe;
+            color: #1877f2;
+        }
+
+        .alert.success {
+            background-color: #ebfbee;
+            border: 1px solid #b2f2bb;
+            color: #4caf50;
+        }
+
+        .alert.warning {
+            background-color: #fff9e6;
+            border: 1px solid #fff0c2;
+            color: #ffc107;
+        }
+
+        .alert.error {
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #ef4444;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .user-list {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+
+            .search-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!-- 主内容 -->
+    <div class="main-content">
+        <!-- 顶部搜索 -->
+        <header style="margin-bottom: 20px;">
+            <h2 style="margin-bottom: 15px; color: #1877f2;">👤 用户信息管理</h2>
+            <div class="search-section">
+                <input
+                        v-model="nickname"
+                        placeholder="搜索昵称"
+                        class="search-input"
+                        @keyup.enter="getUser"
+                />
+                <button @click="getUser" class="search-button">查询</button>
+            </div>
+        </header>
+
+        <!-- 内容滚动区域 -->
+        <main class="content-area">
+            <!-- 用户列表容器 -->
+            <div class="user-list-container">
+                <!-- 查询结果提示框 - 移到搜索结果上方 -->
+                <div v-if="searchAlertVisible" :class="['alert', searchAlertType]">
+                    {{ searchAlertMessage }}
+                </div>
+
+                <!-- 查询结果展示区域 - 放在用户列表上方 -->
+                <div class="search-result-container" v-if="searchResultUser">
+                    <div class="search-result-card">
+                        <img
+                                class="avatar"
+                                :src="searchResultUser.avatar"
+                                alt="头像"
+                        />
+                        <h3>{{ searchResultUser.name }} ({{ searchResultUser.nickname }})</h3>
+                        <div>
+                            <p><i class="fas fa-birthday-cake"></i> 年龄: {{ searchResultUser.age }} | <i
+                                    class="fas fa-venus-mars"></i> 性别: {{ searchResultUser.sex === 1 ? '男' : '女' }}
+                            </p>
+                            <p><i class="fas fa-phone"></i> 手机号: {{ searchResultUser.phone }}</p>
+                            <p><i class="fas fa-id-card"></i> 身份证: {{ searchResultUser.idNumber }}</p>
+                            <p v-if="searchResultUser.avatar"><i class="fas fa-image"></i> 头像已设置</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户列表 -->
+                <section>
+                    <h3><i class="fas fa-user-friends"></i> 📋 用户列表</h3>
+                    <div v-if="userList.length === 0 && !loading" class="alert info">
+                        暂无用户数据
+                    </div>
+                    <div v-if="loading" style="text-align: center; padding: 20px;">
+                        加载中...
+                    </div>
+                    <div class="user-list" v-if="userList.length > 0">
+                        <div
+                                class="user-card"
+                                v-for="user in userList"
+                                :key="user.id || user.nickname"
+                                @click="selectUser(user)"
+                                :class="{active: expandedUser && expandedUser.id === user.id}"
+                                title="点击查看详情"
+                        >
+                            <img
+                                    class="avatar"
+                                    :src="user.avatar || 'https://via.placeholder.com/80?text=头像'"
+                                    alt="头像"
+                            />
+                            <div class="user-info">
+                                <h3>{{ user.name }} ({{ user.nickname }})</h3>
+                                <p>年龄: {{ user.age }} | 性别: {{ user.sex === 1 ? '男' : '女' }}</p>
+                                <p>手机号: {{ user.phone }}</p>
+                            </div>
+
+                            <!-- 删除按钮 -->
+                            <button @click.stop="deleteUser(user.id)" class="delete-button">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                            <!-- 用户详情扩展区域 -->
+                            <div class="user-details-expanded" v-if="expandedUser && expandedUser.id === user.id">
+                                <p><i class="fas fa-id-card"></i> 身份证: {{ user.idNumber }}</p>
+                                <!-- 如果有头像URL也可以在这里显示 -->
+                                <p v-if="user.avatar"><i class="fas fa-image"></i> 头像已设置</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 创建用户 -->
+            <section class="card" style="margin-top: 30px;">
+                <h3><i class="fas fa-user-plus"></i> 📝 创建新用户</h3>
+                <div class="create-user-form">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input id="name" v-model="userForm.name" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">昵称</label>
+                        <input id="nickname" v-model="userForm.nickname" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">年龄</label>
+                        <input id="age" type="number" v-model="userForm.age" min="1" max="120" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">手机号</label>
+                        <input id="phone" v-model="userForm.phone" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">性别</label>
+                        <select id="sex" v-model="userForm.sex" required>
+                            <option value="">请选择</option>
+                            <option value="0">女</option>
+                            <option value="1">男</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idNumber">身份证号</label>
+                        <input id="idNumber" v-model="userForm.idNumber" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">头像URL</label>
+                        <input id="avatar" v-model="userForm.avatar"/>
+                    </div>
+                    <button @click="createUser" class="form-button">创建用户</button>
+                </div>
+
+                <div v-if="postResult" :class="['alert', postResultType]">
+                    {{ postResultTitle }}
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    const {createApp, ref, onMounted} = Vue;
+    createApp({
+        setup() {
+            const userList = ref([]);
+            const loading = ref(false);
+
+            // 当前展开的用户详情
+            const expandedUser = ref(null);
+
+            // 搜索结果用户
+            const searchResultUser = ref(null);
+
+            // 搜索相关的提示信息（独立于表单提交的提示）
+            const searchAlertVisible = ref(false);
+            const searchAlertMessage = ref("");
+            const searchAlertType = ref("success");
+
+            const nickname = ref("");
+
+            const userForm = ref({
+                name: "",
+                nickname: "",
+                age: null,
+                phone: "",
+                sex: "",
+                idNumber: "",
+                avatar: ""
+            });
+
+            // 表单提交相关的提示信息
+            const postResult = ref(false);
+            const postResultTitle = ref("");
+            const postResultType = ref("success");
+            const postResultData = ref("");
+
+            const fetchUserList = () => {
+                loading.value = true;
+                fetch("http://localhost:8080/user/list", {
+                    method: "GET"
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.code === 0 && Array.isArray(data.data)) {
+                            userList.value = data.data;
+                        } else {
+                            userList.value = [];
+                        }
+                    })
+                    .catch(() => {
+                        userList.value = [];
+                    })
+                    .finally(() => {
+                        loading.value = false;
+                    });
+            };
+
+            const getUser = () => {
+                // 重置之前的搜索状态
+                searchResultUser.value = null;
+                searchAlertVisible.value = false;
+
+                if (!nickname.value.trim()) {
+                    searchAlertMessage.value = "请输入昵称";
+                    searchAlertType.value = "warning";
+                    searchAlertVisible.value = true;
+                    return;
+                }
+
+                fetch(`http://localhost:8080/user/get?nickname=${encodeURIComponent(nickname.value)}`, {
+                    method: "GET"
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.code === 0) {
+                            searchAlertMessage.value = "查询成功";
+                            searchAlertType.value = "success";
+                            searchResultUser.value = data.data;
+                        } else {
+                            searchAlertMessage.value = `错误: ${data.message}`;
+                            searchAlertType.value = "error";
+                        }
+                        searchAlertVisible.value = true;
+                    })
+                    .catch((err) => {
+                        searchAlertMessage.value = "请求出错: " + err;
+                        searchAlertType.value = "error";
+                        searchAlertVisible.value = true;
+                    });
+            };
+
+            const createUser = () => {
+                if (!userForm.value.name || !userForm.value.nickname || !userForm.value.age || !userForm.value.phone || userForm.value.sex === "") {
+                    postResultTitle.value = "请填写必填项";
+                    postResultType.value = "warning";
+                    postResult.value = true;
+                    return;
+                }
+
+                fetch("http://localhost:8080/user/create", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(userForm.value)
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.code === 0) {
+                            postResultTitle.value = "用户创建成功";
+                            postResultType.value = "success";
+
+                            // 重置表单
+                            userForm.value = {
+                                name: "",
+                                nickname: "",
+                                age: null,
+                                phone: "",
+                                sex: "",
+                                idNumber: "",
+                                avatar: ""
+                            };
+
+                            // 重新获取用户列表
+                            fetchUserList();
+                        } else {
+                            postResultTitle.value = `错误: ${data.message}`;
+                            postResultType.value = "error";
+                        }
+                        postResult.value = true;
+
+                        // 3秒后自动隐藏提示
+                        setTimeout(() => {
+                            postResult.value = false;
+                        }, 3000);
+                    })
+                    .catch((err) => {
+                        postResultTitle.value = "请求出错: " + err;
+                        postResultType.value = "error";
+                        postResult.value = true;
+                    });
+            };
+
+            const deleteUser = (id) => {
+                if (confirm('确定要删除这个用户吗？')) {
+                    fetch(`http://localhost:8080/user/delete?id=${id}`, {
+                        method: "GET"
+                    })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            if (data.code === 0) {
+                                postResultTitle.value = "用户删除成功";
+                                postResultType.value = "success";
+
+                                // 重新获取用户列表以更新UI
+                                fetchUserList();
+                            } else {
+                                postResultTitle.value = `错误: ${data.message}`;
+                                postResultType.value = "error";
+                            }
+                            postResult.value = true;
+
+                            // 3秒后自动隐藏提示
+                            setTimeout(() => {
+                                postResult.value = false;
+                            }, 3000);
+                        })
+                        .catch((err) => {
+                            postResultTitle.value = "请求出错: " + err;
+                            postResultType.value = "error";
+                            postResult.value = true;
+                        });
+                }
+            };
+
+            const selectUser = (user) => {
+                // 如果当前已经有展开的用户，并且点击的是同一个用户，则收起详情
+                if (expandedUser.value && expandedUser.value.id === user.id) {
+                    expandedUser.value = null;
+                } else {
+                    // 否则展开点击的用户详情
+                    expandedUser.value = user;
+                }
+
+                // 清除搜索结果
+                searchResultUser.value = null;
+                searchAlertVisible.value = false;
+            };
+
+            onMounted(() => {
+                fetchUserList();
+            });
+
+            return {
+                userList,
+                loading,
+                nickname,
+                getUser,
+                userForm,
+                createUser,
+                postResult,
+                postResultTitle,
+                postResultType,
+                postResultData,
+                selectUser,
+                expandedUser,
+                searchResultUser,
+                deleteUser,
+                searchAlertVisible,
+                searchAlertMessage,
+                searchAlertType
+            };
+        }
+    }).mount("#app");
+</script>
+</body>
+</html>
