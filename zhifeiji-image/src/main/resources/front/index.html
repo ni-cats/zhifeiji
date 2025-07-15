@@ -1,603 +1,924 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <title>喵九快送</title>
-    <link rel="icon" href="images/xjiang-logo.png">
-    <!--不同屏幕尺寸根字体设置-->
-    <script src="./js/base.js"></script>
-    <!--element-ui的样式-->
-    <link rel="stylesheet" href="../backend/plugins/element-ui/index.css" />
-    <!--引入vant样式-->
-    <link rel="stylesheet" href="styles/vant.min.css"/>
-    <!-- 引入样式  -->
-    <link rel="stylesheet" href="styles/index.css" />
-    <!--本页面内容的样式-->
-    <link rel="stylesheet" href="styles/main.css" />
-  </head>
-  <body>
-    <div id="main" class="app">
-      <div class="divHead">
-        <img src="./images/user.png" @click="toUserPage"/>
-      </div>
-      <div class="divTitle">
-        <div class="divStatic">
-          <img src="./images/logo-cat.png"  class="logo"/>
-          <div class="divDesc">
-            <div class="divName">喵九匠餐厅</div>
-            <div class="divSend">
-                <span><img src="./images/time.png"/> 距离1.5km</span>
-                <span><img src="./images/money.png"/> 配送费6元</span>
-                <span><img src="./images/location.png"/> 预计时长12min</span>
-            </div>
-          </div>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        accent: '#FF7D00',
+                        neutral: '#F2F3F5',
+                        'neutral-dark': '#4E5969',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .transition-custom {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <i class="fa fa-picture-o text-primary text-2xl"></i>
+            <h1 class="text-xl font-bold text-primary">纸飞机影集</h1>
         </div>
-        <div class="divDesc">
-          简介: 喵九匠中餐厅是喵九匠点餐的独立的品牌，定位“大众 化的美食外送餐饮”，旨为顾客打造专业美食。
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#" class="text-gray-600 hover:text-primary transition-custom">
+                <i class="fa fa-home mr-1"></i>首页
+            </a>
+            <a href="#" class="text-primary border-b-2 border-primary pb-1">
+                <i class="fa fa-image mr-1"></i>影集
+            </a>
+            <a href="#" class="text-gray-600 hover:text-primary transition-custom">
+                <i class="fa fa-line-chart mr-1"></i>数据分析
+            </a>
+            <a href="#" class="text-gray-600 hover:text-primary transition-custom">
+                <i class="fa fa-cog mr-1"></i>系统设置
+            </a>
         </div>
-      </div>
-      <div class="divBody">
-        <div class="divType">
-          <ul>
-            <li v-for="(item,index) in categoryList" :key="index" @click="categoryClick(index,item.id,item.type)" :class="{active:activeType === index}">{{item.name}}</li>
-          </ul>
+        <div class="flex items-center space-x-4">
+            <button class="relative p-2 text-gray-600 hover:text-primary transition-custom">
+                <i class="fa fa-bell-o"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full object-cover border-2 border-primary">
+                <span class="hidden md:inline text-sm font-medium">管理员</span>
+            </div>
+            <button class="md:hidden text-gray-600 hover:text-primary transition-custom">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
-        <div class="divMenu">
-          <div>
-            <div class="divItem" v-for="(item,index) in dishList" :key="index" @click="dishDetails(item)">
-              <el-image :src="imgPathConvert(item.image)" >
-                <div slot="error" class="image-slot">
-                  <img src="./images/noImg.png"/>
-                </div>
-              </el-image>
-              <div>
-                <div class="divName">{{item.name}}</div>
-                <div class="divDesc">{{item.description}}</div>
-                <div class="divDesc">{{'月销' + (item.saleNum ? item.saleNum : 0)  }}</div>
-                <div class="divBottom"><span>￥</span><span>{{item.price/100}}</span></div>
-                <div class="divNum">
-                  <div class="divSubtract" v-if="item.number > 0">
-                    <img src="./images/subtract.png" @click.prevent.stop="subtractCart(item)"/>
-                  </div>
-                  <div class="divDishNum">{{item.number}}</div>
-                  <div class="divTypes" v-if="item.flavors && item.flavors.length > 0 && !item.number " @click.prevent.stop="chooseFlavorClick(item)">选择规格</div>
-                  <div class="divAdd" v-else>
-                    <img src="./images/add.png" @click.prevent.stop="addCart(item)"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="divLayer">
-        <div class="divLayerLeft"></div>
-        <div class="divLayerRight"></div>
-      </div>
-      <div class="divCart" v-if="categoryList.length > 0">
-          <div :class="{imgCartActive: cartData && cartData.length > 0, imgCart:!cartData || cartData.length<1}" @click="openCart"></div>
-          <div :class="{divGoodsNum:1===1, moreGoods:cartData && cartData.length > 99}" v-if="cartData && cartData.length > 0">{{ goodsNum }}</div>
-          <div class="divNum">
-              <span>￥</span>
-              <span>{{goodsPrice}}</span>
-          </div>
-          <div class="divPrice"></div>
-          <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="toAddOrderPage">去结算</div>
-        </div>
-        <van-dialog v-model="dialogFlavor.show" :show-confirm-button="false" class="dialogFlavor" ref="flavorDialog">
-          <div class="dialogTitle">{{dialogFlavor.name}}</div>
-          <div class="divContent">
-            <div v-for="flavor in dialogFlavor.flavors" :key="flavor.id">
-                <div class="divFlavorTitle">{{flavor.name}}</div>
-                <span v-for="item in JSON.parse(flavor.value)"
-                :key="item"
-                @click="flavorClick(flavor,item)"
-                :class="{spanActive:flavor.dishFlavor === item}"
-                >{{item}}</span>
-            </div>
-          </div>
-          <div class="divBottom">
-            <div><span class="spanMoney">￥</span>{{dialogFlavor.price/100}}</div>
-            <div @click="dialogFlavorAddCart">加入购物车</div>
-          </div>
-          <div class="divFlavorClose" @click="dialogFlavor.show = false">
-            <img src="./images/close.png"/>
-          </div>
-        </van-dialog>
-        <van-popup v-model="cartDialogShow" position="bottom" :style="{ height: '50%' }" class="dialogCart">
-          <div class="divCartTitle">
-            <div class="title">购物车</div>
-            <div class="clear" @click="clearCart">
-              <i class="el-icon-delete"></i> 清空
-            </div>
-          </div>
-          <div class="divCartContent">
-            <div v-for="item in cartData" :key="item.id" class="divCartItem">
-              <el-image :src="imgPathConvert(item.image)" >
-                <div slot="error" class="image-slot">
-                  <img src="./images/noImg.png"/>
-                </div>
-              </el-image>
-              <div class="divDesc">
-                <div class="name">{{item.name}}</div>
-                <div class="price">
-                  <span class="spanMoney">￥</span>{{item.amount}}</div>
-              </div>
-              <div class="divNum">
-                <div class="divSubtract">
-                  <img src="./images/subtract.png" @click="cartNumberSubtract(item)"/>
-                </div>
-                <div class="divDishNum">{{item.number}}</div>
-                <div class="divAdd">
-                  <img src="./images/add.png" @click="cartNumAdd(item)"/>
-                </div>
-              </div>
-              <div class="divSplit"></div>
-              </div>
-          </div>
-        </van-popup>
-        <van-dialog v-model="detailsDialog.show"
-                    :show-confirm-button="false"
-                    class="detailsDialog"
-                    ref="detailsDialog"
-                    v-if="detailsDialog.show"
-                    >
-          <div class="divContainer">
-            <el-image :src="imgPathConvert(detailsDialog.item.image)" >
-              <div slot="error" class="image-slot">
-                <img src="./images/noImg.png"/>
-              </div>
-            </el-image>
-            <div class="title">{{detailsDialog.item.name}}</div>
-            <div class="content">{{detailsDialog.item.description}}</div>
-          </div>
-          <div class="divNum">
-            <div class="left">
-              <span>￥</span><span>{{detailsDialog.item.price/100}}</span>
-            </div>
-            <div class="right">
-                <div class="divSubtract" v-if="detailsDialog.item.number > 0">
-                  <img src="./images/subtract.png" @click="subtractCart(detailsDialog.item)"/>
-                </div>
-                <div class="divDishNum">{{detailsDialog.item.number}}</div>
-                <div class="divTypes" v-if="detailsDialog.item.flavors && detailsDialog.item.flavors.length > 0 && !detailsDialog.item.number " @click ="chooseFlavorClick(detailsDialog.item)">选择规格</div>
-                <div class="divAdd" v-else>
-                  <img src="./images/add.png" @click="addCart(detailsDialog.item)"/>
-                </div>
-            </div>
-          </div>
-          <div class="detailsDialogClose" @click="detailsDialog.show = false">
-            <img src="./images/close.png"/>
-          </div>
-        </van-dialog>
-        <van-dialog v-model="setMealDialog.show"
-                    :show-confirm-button="false"
-                    class="setMealDetailsDialog"
-                    ref="setMealDetailsDialogd"
-                    v-if="setMealDialog.show"
-                    >
-          <div class="divContainer">
-            <div class="title">{{setMealDialog.item.name}}</div>
-              <div class="item" v-for="(item,index) in setMealDialog.item.list" :key="index">
-                <el-image :src="imgPathConvert(item.image)">
-                  <div slot="error" class="image-slot">
-                    <img src="./images/noImg.png"/>
-                  </div>
-                </el-image>
-                <div class="divSubTitle">{{item.name + '(' + item.copies + '份)' }}
-                  <div class="divPrice">
-                    <span>￥</span><span>{{item.price/100}}</span>
-                  </div>
-                </div>
-                <div class="content">{{item.description}}</div>
-              </div>
-            </div>
-          <div class="divNum">
-              <div class="left">
-                <span>￥</span><span>{{setMealDialog.item.price/100}}</span>
-              </div>
-              <div class="right">
-                  <div class="divSubtract" v-if="setMealDialog.item.number > 0">
-                    <img src="./images/subtract.png" @click="subtractCart(setMealDialog.item)"/>
-                  </div>
-                  <div class="divDishNum">{{setMealDialog.item.number}}</div>
-                  <div class="divAdd" v-if="setMealDialog.item.number">
-                    <img src="./images/add.png" @click="addCart(setMealDialog.item)"/>
-                  </div>
-                  <div class="addCart"  @click="addCart(setMealDialog.item)" v-if="!setMealDialog.item.number">加入购物车</div>
-              </div>
-          </div>
-          <div class="detailsDialogClose" @click="setMealDialog.show = false">
-            <img src="./images/close.png"/>
-          </div>
-        </van-dialog>
     </div>
-        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
-        <script src="../backend/plugins/vue/vue.js"></script>
-        <!-- 引入组件库 -->
-        <script src="../backend/plugins/element-ui/index.js"></script>
-        <!-- 引入vant样式 -->
-        <script src="./js/vant.min.js"></script>
-        <!-- 引入axios -->
-        <script src="../backend/plugins/axios/axios.min.js"></script>
-        <script src="./js/request.js"></script>
-        <script src="./js/common.js"></script>
-        <script src="./api/main.js"></script>
-  </body>
-  <script>
-      new Vue({
-          el:'#main',
-          data(){
-            return {
-              //左边菜品类别index
-              activeType:0,
-              categoryList:[],
-              categoryId:undefined,
-              dishList:[],
-              cartData:[],
-              dialogFlavor:{
-                name:'',
-                flavors:[],
-                dishId:undefined,
-                price:undefined,
-                show:false,
-                image:''
-              },
-              cartDialogShow:false,
-              detailsDialog:{
-                show:false,
-                item:{image:''}
-              },
-              setMealDialog:{
-                show:false,
-                item:{}
-              },
+</header>
+
+<!-- 主内容区 -->
+<main class="flex-grow container mx-auto px-4 py-6">
+    <!-- 页面标题 -->
+    <div class="mb-6">
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-gray-800">图片管理</h2>
+        <p class="text-gray-500 mt-1">管理、上传和查看所有图片资源</p>
+    </div>
+
+    <!-- 操作区 -->
+    <div class="bg-white rounded-xl p-5 mb-6 card-shadow">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex-1">
+                <div class="relative">
+                    <input type="text" placeholder="搜索图片名称、地址或用户..."
+                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                    <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <select class="appearance-none pl-4 pr-10 py-2 border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                        <option value="">所有分区</option>
+                        <option value="1">自然风光</option>
+                        <option value="2">城市建筑</option>
+                        <option value="3">人文历史</option>
+                        <option value="4">美食小吃</option>
+                    </select>
+                    <i class="fa fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+                <button id="uploadBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-custom">
+                    <i class="fa fa-plus"></i>
+                    <span>添加图片</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片上传模态框 -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-lg font-semibold">添加图片</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="uploadForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">图片URL</label>
+                        <input type="url" name="url" placeholder="请输入图片URL"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                        <p class="text-xs text-gray-500 mt-1">请输入有效的图片URL地址（例如：https://example.com/image.jpg）</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">图片名称</label>
+                            <input type="text" name="name" placeholder="请输入图片名称"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">所属分区</label>
+                            <select name="partId" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                                <option value="">请选择分区</option>
+                                <option value="1">自然风光</option>
+                                <option value="2">城市建筑</option>
+                                <option value="3">人文历史</option>
+                                <option value="4">美食小吃</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">地理位置</label>
+                        <div class="flex flex-col sm:flex-row gap-4 mb-3">
+                            <div class="flex-1">
+                                <input type="text" name="Longitude" placeholder="经度"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                            </div>
+                            <div class="flex-1">
+                                <input type="text" name="Latitude" placeholder="纬度"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                            </div>
+                            <button type="button" id="getLocation" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-custom">
+                                <i class="fa fa-map-marker"></i>
+                                <span>获取当前位置</span>
+                            </button>
+                        </div>
+                        <div class="h-48 rounded-lg overflow-hidden border border-gray-200">
+                            <div id="map" class="w-full h-full"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">详细地址</label>
+                        <input type="text" name="address" placeholder="请输入详细地址"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom">
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                        <button type="button" id="cancelUpload" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-custom">取消</button>
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-custom">添加图片</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容展示区 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 图片列表 -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- 图片统计卡片 -->
+            <div class="bg-white rounded-xl p-5 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">图片统计</h3>
+                    <div class="text-sm text-gray-500">
+                        <span id="totalImages">0</span> 张图片
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <div class="text-blue-500 text-sm mb-1">自然风光</div>
+                        <div class="text-2xl font-bold">24</div>
+                        <div class="text-xs text-green-500 mt-1"><i class="fa fa-arrow-up"></i> 12%</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-4">
+                        <div class="text-purple-500 text-sm mb-1">城市建筑</div>
+                        <div class="text-2xl font-bold">18</div>
+                        <div class="text-xs text-green-500 mt-1"><i class="fa fa-arrow-up"></i> 8%</div>
+                    </div>
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <div class="text-yellow-500 text-sm mb-1">人文历史</div>
+                        <div class="text-2xl font-bold">36</div>
+                        <div class="text-xs text-green-500 mt-1"><i class="fa fa-arrow-up"></i> 15%</div>
+                    </div>
+                    <div class="bg-pink-50 rounded-lg p-4">
+                        <div class="text-pink-500 text-sm mb-1">美食小吃</div>
+                        <div class="text-2xl font-bold">12</div>
+                        <div class="text-xs text-red-500 mt-1"><i class="fa fa-arrow-down"></i> 3%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图片列表 -->
+            <div class="bg-white rounded-xl p-5 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">最新上传图片</h3>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-1.5 text-gray-400 hover:text-primary rounded-full hover:bg-gray-100 transition-custom">
+                            <i class="fa fa-th-large"></i>
+                        </button>
+                        <button class="p-1.5 text-primary rounded-full bg-primary/10 transition-custom">
+                            <i class="fa fa-th-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="imageList">
+                    <!-- 图片项将通过 JavaScript 动态生成 -->
+                </div>
+
+                <!-- 加载更多 -->
+                <div class="mt-6 text-center">
+                    <button id="loadMore" class="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-custom">
+                        <i class="fa fa-refresh mr-1"></i>加载更多
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧边栏 -->
+        <div class="space-y-6">
+            <!-- 地图卡片 -->
+            <div class="bg-white rounded-xl p-5 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">图片地理位置</h3>
+                    <button class="text-primary text-sm hover:underline">查看全部</button>
+                </div>
+                <div class="h-80 rounded-lg overflow-hidden border border-gray-200">
+                    <div id="locationMap" class="w-full h-full"></div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-custom cursor-pointer">
+                        <div class="w-10 h-10 rounded-lg overflow-hidden mr-3">
+                            <img src="https://picsum.photos/id/10/100/100" alt="风景图片" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium">黄山云海</div>
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <i class="fa fa-map-marker mr-1"></i>
+                                <span>安徽省黄山市</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500">118.1766, 30.1400</div>
+                    </div>
+                    <div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-custom cursor-pointer">
+                        <div class="w-10 h-10 rounded-lg overflow-hidden mr-3">
+                            <img src="https://picsum.photos/id/20/100/100" alt="城市图片" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium">上海外滩</div>
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <i class="fa fa-map-marker mr-1"></i>
+                                <span>上海市黄浦区</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500">121.4737, 31.2304</div>
+                    </div>
+                    <div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-custom cursor-pointer">
+                        <div class="w-10 h-10 rounded-lg overflow-hidden mr-3">
+                            <img src="https://picsum.photos/id/30/100/100" alt="古迹图片" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium">北京故宫</div>
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <i class="fa fa-map-marker mr-1"></i>
+                                <span>北京市东城区</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500">116.3972, 39.9163</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门标签 -->
+            <div class="bg-white rounded-xl p-5 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">热门标签</h3>
+                    <button class="text-primary text-sm hover:underline">管理标签</button>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm">自然风光</span>
+                    <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm">城市建筑</span>
+                    <span class="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full text-sm">人文历史</span>
+                    <span class="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-sm">美食小吃</span>
+                    <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm">旅游景点</span>
+                    <span class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm">地标建筑</span>
+                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">夜景</span>
+                    <span class="px-3 py-1 bg-teal-50 text-teal-600 rounded-full text-sm">日出日落</span>
+                    <span class="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-sm">山水</span>
+                    <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">更多...</span>
+                </div>
+            </div>
+
+            <!-- 上传趋势 -->
+            <div class="bg-white rounded-xl p-5 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">上传趋势</h3>
+                    <div class="text-sm text-gray-500">近7天</div>
+                </div>
+                <div class="h-64">
+                    <canvas id="uploadTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="bg-white border-t border-gray-100 py-6 mt-10">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <div class="flex items-center space-x-2">
+                    <i class="fa fa-picture-o text-primary"></i>
+                    <span class="font-medium text-gray-700">图片管理系统</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">© 2025 图片管理系统. 保留所有权利</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-500 hover:text-primary transition-custom">
+                    <i class="fa fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-500 hover:text-primary transition-custom">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" class="text-gray-500 hover:text-primary transition-custom">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                <a href="#" class="text-gray-500 hover:text-primary transition-custom">
+                    <i class="fa fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- 图片详情模态框 -->
+<div id="imageDetailModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="text-lg font-semibold" id="detailModalTitle">图片详情</h3>
+            <button id="closeDetailModal" class="text-gray-400 hover:text-gray-600">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="rounded-xl overflow-hidden mb-4">
+                        <img id="detailImage" src="https://picsum.photos/id/26/800/600" alt="图片详情" class="w-full h-auto">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex space-x-3">
+                            <button class="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full transition-custom">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                            <button class="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full transition-custom">
+                                <i class="fa fa-share-alt"></i>
+                            </button>
+                            <button class="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full transition-custom">
+                                <i class="fa fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <span id="detailViews">0</span> 次浏览
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 id="detailName" class="text-xl font-bold mb-3">自然风光图片</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="w-16 text-gray-500">分区：</div>
+                            <div id="detailPartId" class="flex-1">自然风光</div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-16 text-gray-500">上传者：</div>
+                            <div id="detailUser" class="flex-1 flex items-center">
+                                <img src="https://picsum.photos/id/64/30/30" alt="用户头像" class="w-6 h-6 rounded-full mr-2">
+                                系统管理员
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-16 text-gray-500">上传时间：</div>
+                            <div id="detailUploadTime" class="flex-1">2025-07-10 14:30:25</div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-16 text-gray-500">地理位置：</div>
+                            <div class="flex-1">
+                                <div id="detailAddress" class="mb-1">安徽省黄山市</div>
+                                <div class="text-sm text-gray-500">
+                                    <i class="fa fa-map-marker mr-1"></i>
+                                    <span id="detailLocation">118.1766, 30.1400</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-16 text-gray-500">图片信息：</div>
+                            <div class="flex-1">
+                                <div class="text-sm text-gray-500 mb-1">JPG, 2048 × 1365, 2.4 MB</div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 transition-custom">
+                                        <i class="fa fa-edit mr-1"></i>编辑
+                                    </button>
+                                    <button class="px-3 py-1 text-xs border border-red-200 text-red-500 rounded-lg hover:bg-red-50 transition-custom">
+                                        <i class="fa fa-trash-o mr-1"></i>删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 地理位置地图 -->
+            <div class="mt-6">
+                <h4 class="font-semibold mb-3">地理位置</h4>
+                <div class="h-48 rounded-lg overflow-hidden border border-gray-200">
+                    <div id="detailMap" class="w-full h-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // API配置
+    const API_BASE_URL = 'http://localhost:8080/image'; // 后端API基础路径
+
+    // 初始化地图
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXVzZXIiLCJhIjoiY2x0d3Y0dGQ4MG9kNzJqcXZxY25lZnR1dCJ9.9VwSf3pXtJ0lQ3rLJQzBVA';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [116.3972, 39.9163], // 北京
+        zoom: 12
+    });
+
+    const locationMap = new mapboxgl.Map({
+        container: 'locationMap',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [104.1141, 35.8617], // 中国中心
+        zoom: 4
+    });
+
+    const detailMap = new mapboxgl.Map({
+        container: 'detailMap',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [118.1766, 30.1400], // 黄山
+        zoom: 10
+    });
+
+    // 添加地图控件
+    map.addControl(new mapboxgl.NavigationControl());
+    locationMap.addControl(new mapboxgl.NavigationControl());
+    detailMap.addControl(new mapboxgl.NavigationControl());
+
+    async function fetchImages() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/list`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-          },
-          computed:{
-            goodsNum(){
-              let num = 0
-              this.cartData.forEach(item=>{
-                num += item.number
-              })
-              if(num <99){
-                return num
-              }else{
-                return '99+'
-              }
-            },
-            goodsPrice(){
-              let price = 0
-              this.cartData.forEach(item=>{
-                price += (item.number * item.amount)
-              })
-              return price
+            const result = await response.json();
+            // 后端用 code:0 表示成功，对应修改判断条件
+            if (result && result.data && result.code === 0) {
+                return result.data;  // 返回图片列表数组
+            } else {
+                // 失败时使用后端返回的 msg 提示
+                throw new Error('Failed to fetch images: ' + (result.msg || 'Unknown error'));
             }
-          },
-          created(){
-          },
-          watch:{
-            'dialogFlavor.show'(flag){
-              if(flag){
-                document.querySelector('.divCart').style.zIndex = 1
-              }else{
-                document.querySelector('.divCart').style.zIndex = 3000
-              }
+        } catch (error) {
+            console.error('Error fetching images:', error);
+            alert('获取图片列表失败，请稍后重试');
+            return [];
+        }
+    }
+
+    // 渲染图片列表
+    async function renderImageList() {
+        const imageList = document.getElementById('imageList');
+        imageList.innerHTML = '<div class="flex justify-center py-10"><i class="fa fa-spinner fa-spin text-2xl text-gray-400"></i></div>';
+
+        const images = await fetchImages();
+
+        if (images.length === 0) {
+            imageList.innerHTML = `
+                    <div class="py-10 text-center">
+                        <i class="fa fa-image text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">暂无图片</p>
+                        <button id="uploadFirstBtn" class="mt-3 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                            <i class="fa fa-plus mr-1"></i>添加第一张图片
+                        </button>
+                    </div>
+                `;
+            document.getElementById('uploadFirstBtn').addEventListener('click', () => {
+                document.getElementById('uploadModal').classList.remove('hidden');
+            });
+            return;
+        }
+
+        imageList.innerHTML = '';
+
+        images.forEach(image => {
+            const imageItem = document.createElement('div');
+            imageItem.className = 'flex border border-gray-100 rounded-lg overflow-hidden hover:shadow-md transition-custom';
+            imageItem.innerHTML = `
+                    <div class="w-1/3">
+                        <img src="${image.url}" alt="${image.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-medium text-gray-800">${image.name}</h4>
+                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs">${getPartName(image.partId)}</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 mt-2">
+                            <img src="https://picsum.photos/id/64/30/30" alt="用户头像" class="w-5 h-5 rounded-full mr-2">
+                            ${image.userNickName}
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 mt-1">
+                            <i class="fa fa-map-marker mr-1"></i>
+                            ${image.address}
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 mt-1">
+                            <i class="fa fa-calendar mr-1"></i>
+                            ${formatDate(image.createTime)}
+                        </div>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fa fa-eye mr-1"></i>
+                                ${image.views || 0} 次浏览
+                            </div>
+                            <button class="text-primary hover:text-primary/80 text-sm view-detail" data-id="${image.id}">
+                                查看详情 <i class="fa fa-angle-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            imageList.appendChild(imageItem);
+        });
+
+        // 绑定查看详情事件
+        document.querySelectorAll('.view-detail').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                showImageDetail(id);
+            });
+        });
+
+        // 更新图片总数
+        document.getElementById('totalImages').textContent = images.length;
+
+        // 添加地图标记
+        addMapMarkers(images);
+    }
+
+    // 显示图片详情
+    async function showImageDetail(id) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/detail/${id}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result && result.success && result.data) {
+                const image = result.data;
+
+                document.getElementById('detailImage').src = image.url;
+                document.getElementById('detailImage').alt = image.name;
+                document.getElementById('detailName').textContent = image.name;
+                document.getElementById('detailPartId').textContent = getPartName(image.partId);
+                document.getElementById('detailUser').querySelector('span').textContent = image.userNickName;
+                document.getElementById('detailUploadTime').textContent = formatDate(image.createTime);
+                document.getElementById('detailAddress').textContent = image.address;
+                document.getElementById('detailLocation').textContent = `${image.Longitude}, ${image.Latitude}`;
+                document.getElementById('detailViews').textContent = image.views || 0;
+
+                // 更新详情页地图位置
+                detailMap.flyTo({
+                    center: [parseFloat(image.Longitude), parseFloat(image.Latitude)],
+                    zoom: 12,
+                    speed: 0.8
+                });
+
+                // 添加标记
+                new mapboxgl.Marker()
+                    .setLngLat([parseFloat(image.Longitude), parseFloat(image.Latitude)])
+                    .setPopup(new mapboxgl.Popup().setHTML(`<div class="p-2"><strong>${image.name}</strong><p>${image.address}</p></div>`))
+                    .addTo(detailMap);
+
+                document.getElementById('imageDetailModal').classList.remove('hidden');
+            } else {
+                throw new Error('Failed to fetch image detail: ' + (result.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error fetching image detail:', error);
+            alert('获取图片详情失败，请稍后重试');
+        }
+    }
+
+    // 初始化上传趋势图表
+    function initUploadTrendChart() {
+        const ctx = document.getElementById('uploadTrendChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['7月7日', '7月8日', '7月9日', '7月10日', '7月11日', '7月12日', '7月13日'],
+                datasets: [{
+                    label: '上传数量',
+                    data: [5, 8, 12, 7, 9, 14, 6],
+                    borderColor: '#165DFF',
+                    backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
             },
-          },
-          mounted(){
-            this.initData()
-          },
-          methods:{
-            //初始化数据
-            initData(){
-              Promise.all([categoryListApi(),cartListApi({})]).then(res=>{
-                //获取分类数据
-                if(res[0].code === 1){
-                  this.categoryList = res[0].data
-                  if(Array.isArray(res[0].data) && res[0].data.length > 0){
-                    this.categoryId = res[0].data[0].id
-                    if(res[0].data[0].type === 1){
-                      this.getDishList()
-                    }else{
-                      this.getSetmealData()
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
                     }
-                  }
-                }else{
-                  this.$notify({ type:'warning', message:res[0].msg});
-                }
-                //获取菜品数据
-                if(res[1].code === 1){
-                this.cartData = res[1].data
-                }else{
-                  this.$notify({ type:'warning', message:res[1].msg});
-                }
-              })
-            },
-            //分类点击
-            categoryClick(index,id,type){
-              this.activeType = index
-              this.categoryId = id
-              if(type === 1){//菜品
-                this.getDishList()
-              }else{
-                this.getSetmealData()
-              }
-            },
-            //获取菜品数据
-            async getDishList(){
-              if(!this.categoryId){
-                return
-              }
-              const res = await dishListApi({categoryId:this.categoryId,status:1})
-              if(res.code === 1){
-                let dishList = res.data
-                const cartData  = this.cartData
-                if(dishList.length > 0 && cartData.length > 0){
-                  dishList.forEach(dish=>{
-                    cartData.forEach(cart=>{
-                      if(dish.id === cart.dishId){
-                        dish.number = cart.number
-                      }
-                    })
-                  })
-                }
-                this.dishList = dishList
-              }else{
-                this.$notify({ type:'warning', message:res.msg});
-              }
-            },
-            //获取套餐数据setmealId
-            async getSetmealData(){
-              if(!this.categoryId){
-                return
-              }
-              const res = await setmealListApi({categoryId:this.categoryId,status:1})
-              if(res.code === 1){
-                  let dishList = res.data
-                  const cartData  = this.cartData
-                  if(dishList.length > 0 && cartData.length > 0){
-                    dishList.forEach(dish=>{
-                      cartData.forEach(cart=>{
-                        if(dish.id === cart.setmealId){
-                          dish.number = cart.number
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
                         }
-                      })
-                    })
-                  }
-                  this.dishList = dishList
-              }else{
-                this.$notify({ type:'warning', message:res.msg});
-              }
-            },
-            //获取购物车数据
-            async getCartData(){
-              const res = await cartListApi({})
-              if(res.code === 1){
-                this.cartData = res.data
-              }else{
-                this.$notify({ type:'warning', message:res.msg});
-              }
-            },
-            //菜单中往购物车中添加商品
-            async addCart(item){
-              let params = {
-                amount:item.price/100,//金额
-                dishFlavor:item.dishFlavor,//口味  如果没有传undefined
-                dishId:undefined,//菜品id
-                setmealId:undefined,//套餐id
-                name:item.name,
-                image:item.image
-              }
-              if(Array.isArray(item.flavors)){//表示是菜品
-                params.dishId = item.id
-              }else{//表示套餐 套餐没有口味
-                params.setmealId = item.id
-              }
-              const res = await addCartApi(params)
-              if(res.code === 1){
-                this.dishList.forEach(dish=>{
-                  if(dish.id === item.id){
-                    dish.number = res.data.number
-                  }
-                })
-                if(this.setMealDialog.show){
-                  item.number = res.data.number
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
                 }
-                this.getCartData()
-              }else{
-                this.$notify({ type:'warning', message:res.msg});
-              }
-            },
+            }
+        });
+    }
 
-            //菜单中减少选中的商品
-            async subtractCart(item){
-                let params = {
-                  dishId:item.id,
-                }
-                if(!Array.isArray(item.flavors)){
-                  params = {
-                    setmealId:item.id,
-                  }
-                }
-                const res = await updateCartApi(params)
-                if(res.code === 1){
-                this.dishList.forEach(dish=>{
-                  if(dish.id === item.id){
-                    dish.number = (res.data.number === 0 ? undefined : res.data.number)
-                  }
-                })
-                if(this.setMealDialog.show){
-                  item.number = (res.data.number === 0 ? undefined : res.data.number)
-                }
-                this.getCartData()
-                }else{
-                  this.$notify({ type:'warning', message:res.msg});
-                }
-            },
+    // 添加地图标记
+    function addMapMarkers(images) {
+        // 清除现有标记
+        locationMap.getLayers().forEach(layer => {
+            if (layer.id && layer.id.startsWith('marker-')) {
+                locationMap.removeLayer(layer.id);
+                locationMap.removeSource(layer.id);
+            }
+        });
 
-            //展开购物车
-            openCart(){
-              if(this.cartData.length > 0){
-                this.cartDialogShow = true
-              }
-            },
-            //购物车中增加商品数量
-            async cartNumAdd(item){
-              let params = {
-                amount:item.amount,//金额
-                dishFlavor:item.dishFlavor,//口味  如果没有传undefined
-                dishId:item.dishId,//菜品id
-                setmealId:item.setmealId,//套餐id
-                name:item.name,
-                image:item.image
-              }
-              const res = await addCartApi(params)
-              if(res.code === 1){
-                this.dishList.forEach(dish=>{
-                  if(dish.id === (item.dishId || item.setmealId)){
-                    dish.number = res.data.number
-                  }
-                })
-                console.log(this.dishList)
-                this.getCartData()
-              }else{
-                this.$notify({ type:'warning', message:res.msg});
-              }
-            },
-            //购物车中减少商品数量
-            async cartNumberSubtract(item){
-              let params = {
-                  dishId:item.dishId,
-                  setmealId:item.setmealId,
-                }
-                const res = await updateCartApi(params)
-                if(res.code === 1){
-                this.dishList.forEach(dish=>{
-                  if(dish.id === (item.dishId || item.setmealId)){
-                    dish.number = (res.data.number === 0 ? undefined : res.data.number)
-                  }
-                })
-                this.getCartData()
-                }else{
-                  this.$notify({ type:'warning', message:res.msg});
-                }
-            },
+        images.forEach((image, index) => {
+            if (image.Longitude && image.Latitude) {
+                // 为位置地图添加标记
+                const el = document.createElement('div');
+                el.className = 'marker';
+                el.style.backgroundColor = '#165DFF';
+                el.style.width = '16px';
+                el.style.height = '16px';
+                el.style.borderRadius = '50%';
+                el.style.cursor = 'pointer';
 
-            //修改商品列表中的数据number
-            changeDishList(item){
-              for(let ele of this.dishList){
-                if(ele.id === (item.setmealId || item.dishId)){
-                  ele.number = item.number
-                }
-              }
-            },
+                new mapboxgl.Marker(el)
+                    .setLngLat([parseFloat(image.Longitude), parseFloat(image.Latitude)])
+                    .setPopup(new mapboxgl.Popup().setHTML(`
+                            <div class="p-2">
+                                <img src="${image.url}" alt="${image.name}" class="w-24 h-16 object-cover rounded mb-1">
+                                <strong>${image.name}</strong>
+                                <p class="text-xs text-gray-500">${image.address}</p>
+                            </div>
+                        `))
+                    .addTo(locationMap);
+            }
+        });
+    }
 
-            //清空购物车
-            async clearCart(){
-                const res = await clearCartApi()
-                if(res.code === 1){
-                  for(let ele of this.dishList){
-                    ele.number = undefined
-                  }
-                  this.cartData = []
-                  this.cartDialogShow = false
-                }else{
-                  this.$notify({ type:'warning', message:res.msg});
-                }
-            },
-            //点击选择规格
-            chooseFlavorClick(item){
-              this.dialogFlavor = {
-                name:'',
-                flavors:[],
-                dishId:undefined,
-                price:undefined,
-                show:false
-              }
-              this.dialogFlavor={
-                name:item.name,
-                flavors:item.flavors,
-                dishId:item.id,
-                price:item.price,
-                show:true,
-                image:item.image
-              }
-            },
-            flavorClick(flavor,item){
-              flavor.dishFlavor = item
-              //强制刷新dialog的dom
-              this.dialogFlavor.show = false
-              this.dialogFlavor.show = true
-            },
-            //选择规格加入购物车
-            dialogFlavorAddCart(){
-              const dialogFlavor = this.dialogFlavor
-              let flag = true
-              let dishFlavor = []
-              dialogFlavor.flavors.forEach(item=>{
-                if(item.dishFlavor){
-                  dishFlavor.push(item.dishFlavor)
-                }else{
-                      flag = false
-                      Notify({ type: 'warning', message: '请选择'+ item.name });
-                }
-              })
-              if(flag){
-                this.addCart({
-                  price:dialogFlavor.price,
-                  dishFlavor:dishFlavor.join(","),
-                  id:dialogFlavor.dishId,
-                  flavors:[],
-                  image:dialogFlavor.image,
-                  name:dialogFlavor.name
-                })
-                this.dialogFlavor.show = false
-              }
+    // 初始化上传模态框
+    function initUploadModal() {
+        const uploadBtn = document.getElementById('uploadBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelUpload = document.getElementById('cancelUpload');
+        const uploadModal = document.getElementById('uploadModal');
+        const getLocation = document.getElementById('getLocation');
+        const uploadForm = document.getElementById('uploadForm');
 
-            },
-            //网络图片路径转换
-            imgPathConvert(path){
-              return imgPath(path)
-            },
-            //跳转到去结算界面
-            toAddOrderPage(){
-              if(this.cartData.length > 0){
-                window.requestAnimationFrame(()=>{
-                  window.location.href ='/front/page/add-order.html'
-                })
-              }
-            },
-            toUserPage(){
-              window.requestAnimationFrame(()=>{
-                window.location.href= '/front/page/user.html'
-              })
-            },
-            async dishDetails(item){
-              //先清除对象数据，如果不行的话dialog使用v-if
-              this.detailsDialog.item = {}
-              this.setMealDialog.item = {}
-              if(Array.isArray(item.flavors)){
-                this.detailsDialog.item = item
-                this.detailsDialog.show = true
-              }else{
-                //显示套餐的数据
-                const res = await setMealDishDetailsApi(item.id)
-                if(res.code === 1){
-                  this.setMealDialog.item = {...item,list:res.data}
-                  this.setMealDialog.show = true
-                }else{
-                  this.$notify({ type:'warning', message:res.msg});
-                }
-              }
+        // 打开模态框
+        uploadBtn.addEventListener('click', () => {
+            uploadModal.classList.remove('hidden');
+            // 重置表单
+            uploadForm.reset();
+        });
 
+        // 关闭模态框
+        closeModal.addEventListener('click', () => {
+            uploadModal.classList.add('hidden');
+        });
+
+        cancelUpload.addEventListener('click', () => {
+            uploadModal.classList.add('hidden');
+        });
+
+        // 获取当前位置
+        getLocation.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const longitude = position.coords.longitude;
+                        const latitude = position.coords.latitude;
+
+                        document.querySelector('input[name="Longitude"]').value = longitude.toFixed(6);
+                        document.querySelector('input[name="Latitude"]').value = latitude.toFixed(6);
+
+                        // 更新地图位置
+                        map.flyTo({
+                            center: [longitude, latitude],
+                            zoom: 14,
+                            speed: 0.8
+                        });
+
+                        // 添加标记
+                        new mapboxgl.Marker()
+                            .setLngLat([longitude, latitude])
+                            .setPopup(new mapboxgl.Popup().setHTML('<div class="p-2"><strong>当前位置</strong></div>'))
+                            .addTo(map);
+                    },
+                    error => {
+                        alert('无法获取当前位置，请手动输入经纬度');
+                        console.error('Geolocation error:', error);
+                    }
+                );
+            } else {
+                alert('您的浏览器不支持地理位置服务，请手动输入经纬度');
+            }
+        });
+
+        // 表单提交
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 收集表单数据
+            const name = document.querySelector('input[name="name"]').value;
+            const partId = document.querySelector('select[name="partId"]').value;
+            const longitude = document.querySelector('input[name="Longitude"]').value;
+            const latitude = document.querySelector('input[name="Latitude"]').value;
+            const address = document.querySelector('input[name="address"]').value;
+            const url = document.querySelector('input[name="url"]').value;
+
+            // 验证表单
+            if (!name) {
+                alert('请输入图片名称');
+                return;
             }
 
-          }
-      })
-  </script>
-  </html>
+            if (!partId) {
+                alert('请选择所属分区');
+                return;
+            }
+
+            if (!longitude || !latitude) {
+                alert('请输入地理位置');
+                return;
+            }
+
+            if (!url) {
+                alert('请输入图片URL');
+                return;
+            }
+
+            // 验证URL格式
+            try {
+                new URL(url);
+            } catch (_) {
+                alert('请输入有效的图片URL');
+                return;
+            }
+
+            // 创建请求数据
+            const data = {
+                name,
+                partId,
+                Longitude: longitude,
+                Latitude: latitude,
+                address,
+                url,
+                // 模拟用户昵称，实际应从会话中获取
+                userNickName: '系统管理员'
+            };
+
+            // 上传图片信息
+            const submitBtn = uploadForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i>添加中...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (result && result.data && result.code === 0) {
+                    alert('图片添加成功！');
+                    uploadModal.classList.add('hidden');
+                    // 刷新图片列表
+                    renderImageList();
+                } else {
+                    throw new Error('添加失败: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error adding image:', error);
+                alert('图片添加失败，请稍后重试');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    }
+
+    // 工具函数：格式化日期
+    function formatDate(timestamp) {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    // 工具函数：获取分区名称
+    function getPartName(partId) {
+        const parts = {
+            '1': '自然风光',
+            '2': '城市建筑',
+            '3': '人文历史',
+            '4': '美食小吃'
+        };
+        return parts[partId] || partId;
+    }
+
+    // 初始化
+    window.addEventListener('DOMContentLoaded', () => {
+        renderImageList();
+        initUploadTrendChart();
+        initUploadModal();
+
+        // 关闭详情模态框
+        document.getElementById('closeDetailModal').addEventListener('click', () => {
+            document.getElementById('imageDetailModal').classList.add('hidden');
+        });
+
+        // 加载更多
+        document.getElementById('loadMore').addEventListener('click', async () => {
+            const button = document.getElementById('loadMore');
+            button.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i>加载中...';
+
+            try {
+                // 模拟加载更多图片
+                // 实际项目中应该实现分页加载逻辑
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                button.innerHTML = '加载更多';
+                alert('已经加载全部图片');
+            } catch (error) {
+                console.error('Error loading more images:', error);
+                button.innerHTML = '加载更多';
+                alert('加载失败，请稍后重试');
+            }
+        });
+    });
+</script>
+</body>
+</html>
