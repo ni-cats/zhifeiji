@@ -1,7 +1,8 @@
+create database zhifeiji_image;
+
 use zhifeiji_image;
 
 drop table `image`;
-
 
 CREATE TABLE `image`
 (
