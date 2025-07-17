@@ -30,8 +30,7 @@ public class LoginCheckFilter implements Filter {
 
         //不需要处理的请求路径
         String[] urls = new String[]{
-                "/user/**", //测试
-                "/image/**"
+                "/**",
         };
 
         //2、判断本次请求是否需要处理
